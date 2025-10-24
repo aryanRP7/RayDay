@@ -39,7 +39,6 @@
     var(--pink-edge) 100%      /* darker pink edges */
   );
   position: relative;
-  overflow-y: auto;
   overflow-x: auto;
   font-family: "Poppins", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
   color: var(--soft-text);
@@ -547,7 +546,6 @@
     #ff7f9d 100%
   );
   position: relative;
-  overflow-y: auto;   /* vertical scroll */
   overflow-x: hidden; /* prevent horizontal scroll */
   font-family: "Poppins", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
   color: var(--soft-text);
@@ -685,21 +683,13 @@
 
 
 .second-section {
-  position: relative; /* default is fine */
-  opacity: 1;         /* no transition */
-  transform: translateY(0);
-}
-.second-section {
   opacity: 0;
-  transform: translateY(20px);
-  transition: opacity 700ms ease, transform 700ms ease;
+  transition: opacity 700ms ease;
 }
-
 .page.activated .second-section {
   opacity: 1;
-  transform: translateY(0);
-  transition: opacity 0.1s ease, transform 0.1s ease;
 }
+
 
 
 .garland {
@@ -791,3 +781,162 @@
 }
 
  
+
+
+
+
+
+
+
+
+
+/* Letter Modal Overlay */
+.letter-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0,0,0,0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 50;
+  padding: 20px; /* small padding so box doesn't touch edges */
+  overflow-y: auto; /* enable scrolling if content is taller */
+  box-sizing: border-box;
+}
+
+/* Letter Box */
+.letter-modal .letter-box {
+  background-color: #fff8e7;
+  padding: 40px 50px;
+  border-radius: 20px;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+  max-width: 600px;
+  width: 100%;
+  max-height: calc(100vh - 40px); /* prevent overflowing viewport */
+  overflow-y: auto; /* scroll inside box if needed */
+  text-align: center;
+  position: relative;
+}
+
+/* Letter box heading */
+.letter-box h2 {
+  margin-bottom: 20px;
+  font-size: 24px;
+  color: #d93f70;
+}
+
+/* Letter paragraph */
+.letter-box p {
+  font-size: 18px;
+  line-height: 1.6;
+  color: #4b3b6c;
+  margin-bottom: 12px;
+}
+
+/* Close button */
+.letter-box button {
+  margin-top: 20px;
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: none;
+  background-color: #d93f70;
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+/* Optional: Add hover effect for close button */
+.letter-box button:hover {
+  background-color: #c13263;
+}
+.code-display {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 20px;
+  font-size: 2rem;
+  letter-spacing: 4px;
+}
+
+.code-display .digit {
+  width: 35px;
+  height: 45px;
+  border-bottom: 3px solid #d46fa6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  color: #d46fa6;
+}
+
+.code-display .placeholder {
+  color: #ccc;
+}
+
+.keypad {
+  display: grid;
+  grid-template-columns: repeat(3, 70px);
+  grid-gap: 10px;
+  justify-content: center;
+  margin: 0 auto 10px;
+}
+
+.keypad .key {
+  background: #ffe6f0;
+  border: 2px solid #d46fa6;
+  border-radius: 10px;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #d46fa6;
+  padding: 15px 0;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.keypad .key:hover {
+  background: #ffb6d9;
+  color: white;
+}
+
+.keypad .key.backspace {
+  background: #ffe6f0;
+  color: #d46fa6;
+}
+
+.keypad .key.enter {
+  background: #d46fa6;
+  color: white;
+}
+
+.keypad .key.enter:hover {
+  background: #b15b8d;
+}
+
+
+/* shake animation for wrong code */
+@keyframes shakeX {
+  0% { transform: translateX(0); }
+  20% { transform: translateX(-8px); }
+  40% { transform: translateX(8px); }
+  60% { transform: translateX(-6px); }
+  80% { transform: translateX(6px); }
+  100% { transform: translateX(0); }
+}
+
+.code-display.shake,
+.code-input.shake {
+  animation: shakeX 600ms cubic-bezier(.36,.07,.19,.97);
+}
+
+
+/* --- FIX SCROLL ISSUE --- */
+html, body {
+  height: auto;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+

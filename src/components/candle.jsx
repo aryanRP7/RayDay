@@ -13,6 +13,10 @@ export default function Candle() {
   const audioRef = useRef(null);
   const particleId = useRef(0);
   const greetingRef = useRef(null);
+  const [code, setCode] = useState("");
+  const [error, setError] = useState("");
+  const [showLetter, setShowLetter] = useState(false);
+  const [shake, setShake] = useState(false);
 
   // Countdown
   useEffect(() => {
@@ -76,6 +80,25 @@ export default function Candle() {
     };
   }, [activated]);
 
+  const handleCodeSubmit = () => {
+  if (code === "0546") {
+    setShowLetter(true); // Show the letter modal
+    setError("");
+    setCode(""); // optionally clear after success too
+  } else {
+    // show error, clear entered code, trigger a shake animation
+    setError("Incorrect code. Try again!");
+    setCode("");
+    setShake(true);
+
+    // remove shake after animation finishes
+    setTimeout(() => setShake(false), 600);
+
+    // optionally clear the error after a couple seconds
+    setTimeout(() => setError(""), 1800);
+  }
+};
+
   useEffect(() => {
     if (!particles.length) return;
     const t = setTimeout(() => setParticles((prev) => prev.slice(-80)), 3000);
@@ -122,7 +145,6 @@ export default function Candle() {
           <div key={i} className="flag" />
         ))}
       </div>
-      
 
       <audio
         ref={audioRef}
@@ -233,14 +255,75 @@ export default function Candle() {
       </div>
 
       <div className="second-section">
-  <div className="extra-box">
-    <h2>🎁 Another Surprise 🎁</h2>
-    <p>
-      Here's a new light blue box on a soft background, just for you!
-    </p>
+        <div className="extra-box">
+  <h2>🎁 Enter the Secret Code 🎁</h2>
+
+  {/* Code display */}
+  <div className={`code-display ${shake ? "shake" : ""}`}>
+    {code.split("").map((digit, i) => (
+      <span key={i} className="digit">
+        {digit}
+      </span>
+    ))}
+    {Array.from({ length: 4 - code.length }).map((_, i) => (
+      <span key={i + code.length} className="digit placeholder">
+        •
+      </span>
+    ))}
   </div>
+
+  {/* Locker-style keypad */}
+  <div className="keypad">
+    {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((num) => (
+      <button
+        key={num}
+        className="key"
+        onClick={() =>
+          setCode((prev) => (prev.length < 4 ? prev + num.toString() : prev))
+        }
+      >
+        {num}
+      </button>
+    ))}
+
+    <button
+      className="key backspace"
+      onClick={() => setCode((prev) => prev.slice(0, -1))}
+    >
+      ←
+    </button>
+    <button
+      className="key"
+      onClick={() =>
+        setCode((prev) => (prev.length < 4 ? prev + "0" : prev))
+      }
+    >
+      0
+    </button>
+    <button className="key enter" onClick={handleCodeSubmit}>
+      ✔
+    </button>
+  </div>
+
+  {/* Error message */}
+  {error && <p className="code-error">{error}</p>}
 </div>
-      
+
+
+        {/* Letter Modal */}
+        {showLetter && (
+          <div className="letter-modal" onClick={() => setShowLetter(false)}>
+            <div className="letter-box" onClick={(e) => e.stopPropagation()}>
+              <h2>💌 A Special Letter 💌</h2>
+              <p>
+                My love, you light up my life every day. Wishing you endless
+                happiness, love, and magical moments. Happy Birthday! 💖
+              </p>
+              <button onClick={() => setShowLetter(false)}>Close</button>
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
