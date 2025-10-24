@@ -25,8 +25,14 @@ export default function Candle() {
         setShowCountdown(false);
         return;
       }
-      const hours = String(Math.floor(diff / (1000 * 60 * 60))).padStart(2, "0");
-      const minutes = String(Math.floor((diff / (1000 * 60)) % 60)).padStart(2, "0");
+      const hours = String(Math.floor(diff / (1000 * 60 * 60))).padStart(
+        2,
+        "0"
+      );
+      const minutes = String(Math.floor((diff / (1000 * 60)) % 60)).padStart(
+        2,
+        "0"
+      );
       const seconds = String(Math.floor((diff / 1000) % 60)).padStart(2, "0");
       setTimeLeft(`${hours}:${minutes}:${seconds}`);
     }, 1000);
@@ -40,7 +46,7 @@ export default function Candle() {
     const greetingWidth = greetingRef.current.offsetWidth;
 
     const interval = setInterval(() => {
-      setParticles(prev => {
+      setParticles((prev) => {
         const next = [...prev];
         for (let i = 0; i < 7; i++) {
           // Spawn particles around center of greeting
@@ -56,7 +62,7 @@ export default function Candle() {
             rotate: Math.random() * 360,
             opacity: 0.5 + Math.random() * 0.5,
             emoji: emojis[Math.floor(Math.random() * emojis.length)],
-            depth: Math.random() > 0.5 ? 1 : 0
+            depth: Math.random() > 0.5 ? 1 : 0,
           });
         }
         return next.slice(-160);
@@ -72,7 +78,7 @@ export default function Candle() {
 
   useEffect(() => {
     if (!particles.length) return;
-    const t = setTimeout(() => setParticles(prev => prev.slice(-80)), 3000);
+    const t = setTimeout(() => setParticles((prev) => prev.slice(-80)), 3000);
     return () => clearTimeout(t);
   }, [particles]);
 
@@ -88,7 +94,7 @@ export default function Candle() {
   }
 
   function removeParticle(id) {
-    setParticles(prev => prev.filter(p => p.id !== id));
+    setParticles((prev) => prev.filter((p) => p.id !== id));
   }
 
   const placeholderMessage =
@@ -105,20 +111,25 @@ export default function Candle() {
 
   return (
     <div className={`page ${activated ? "activated" : ""}`}>
-<div className="garland top-left">
-  {Array.from({ length: 10 }).map((_, i) => (
-    <div key={i} className="flag" />
-  ))}
-</div>
+      <div className="garland top-left">
+        {Array.from({ length: 10 }).map((_, i) => (
+          <div key={i} className="flag" />
+        ))}
+      </div>
 
-<div className="garland top-right">
-  {Array.from({ length: 10 }).map((_, i) => (
-    <div key={i} className="flag" />
-  ))}
-</div>
+      <div className="garland top-right">
+        {Array.from({ length: 10 }).map((_, i) => (
+          <div key={i} className="flag" />
+        ))}
+      </div>
+      
 
-
-      <audio ref={audioRef} src="/music/birthday-melody.mp3" loop preload="auto" />
+      <audio
+        ref={audioRef}
+        src="/music/birthday-melody.mp3"
+        loop
+        preload="auto"
+      />
       <div className={`bloom ${activated ? "bloom-animate" : ""}`} />
 
       <div className="content">
@@ -127,9 +138,20 @@ export default function Candle() {
         </div>
 
         <div className="candle-wrapper">
-          <svg className="candle-svg" width="140" height="320" viewBox="0 0 140 320">
+          <svg
+            className="candle-svg"
+            width="140"
+            height="320"
+            viewBox="0 0 140 320"
+          >
             <defs>
-              <pattern id="zebraStripes" patternUnits="userSpaceOnUse" width="60" height="60" patternTransform="rotate(45)">
+              <pattern
+                id="zebraStripes"
+                patternUnits="userSpaceOnUse"
+                width="60"
+                height="60"
+                patternTransform="rotate(45)"
+              >
                 <rect width="10" height="60" fill="#ffd1b3" />
                 <rect x="10" width="50" height="90" fill="#ffb6d9" />
                 <rect x="20" width="50" height="90" fill="#ffd1b3" />
@@ -138,7 +160,17 @@ export default function Candle() {
                 <rect x="50" width="50" height="90" fill="#ffb6d9" />
               </pattern>
             </defs>
-            <rect x="50" y="100" width="40" height="180" rx="12" ry="12" fill="url(#zebraStripes)" stroke="#d46fa6" strokeWidth="3" />
+            <rect
+              x="50"
+              y="100"
+              width="40"
+              height="180"
+              rx="12"
+              ry="12"
+              fill="url(#zebraStripes)"
+              stroke="#d46fa6"
+              strokeWidth="3"
+            />
           </svg>
 
           <div className="wick" />
@@ -148,7 +180,9 @@ export default function Candle() {
             aria-label="Blow out the candle"
             className={`flame ${activated ? "flame-out" : ""}`}
             onClick={handleFlameClick}
-            onKeyDown={e => { if (e.key === "Enter") handleFlameClick(); }}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") handleFlameClick();
+            }}
             tabIndex={0}
           >
             <div className="flame-inner" />
@@ -156,13 +190,16 @@ export default function Candle() {
           </div>
         </div>
 
-        <div className={`greeting ${showGreeting ? "visible" : ""}`} ref={greetingRef}>
+        <div
+          className={`greeting ${showGreeting ? "visible" : ""}`}
+          ref={greetingRef}
+        >
           <h1>🎂 Happy Birthday, My Love 💖</h1>
           <p>{placeholderMessage}</p>
 
           {/* Particles inside greeting */}
           <div className="particles">
-            {particles.map(p => (
+            {particles.map((p) => (
               <span
                 key={p.id}
                 className={`particle depth-${p.depth}`}
@@ -175,7 +212,7 @@ export default function Candle() {
                   animationDuration: `${p.duration}s`,
                   transform: `rotate(${p.rotate}deg)`,
                   "--driftX": `${p.driftX}px`,
-                  "--driftY": `${p.driftY}px`
+                  "--driftY": `${p.driftY}px`,
                 }}
                 onAnimationEnd={() => removeParticle(p.id)}
               >
@@ -189,9 +226,21 @@ export default function Candle() {
       <div className="extra-section">
         <div className="extra-box">
           <h2>✨ A Special Surprise ✨</h2>
-          <p>This is your light lavender box centered on the cream background!</p>
+          <p>
+            This is your light lavender box centered on the cream background!
+          </p>
         </div>
       </div>
+
+      <div className="second-section">
+  <div className="extra-box">
+    <h2>🎁 Another Surprise 🎁</h2>
+    <p>
+      Here's a new light blue box on a soft background, just for you!
+    </p>
+  </div>
+</div>
+      
     </div>
   );
 }

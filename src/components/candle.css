@@ -17,7 +17,7 @@
 .page {
   min-height: 100vh;
   display: flex;
-  align-items: center;
+  align-items: stretch;
   justify-content: center;
   background: linear-gradient(180deg, #fffaf6 0%, #fff8f9 100%);
   position: relative;
@@ -373,7 +373,7 @@
 
 .bloom-animate {
   animation: expandBloom 1.2s ease-out forwards,
-             romanticGlow 2s 1.2s ease-in-out forwards; /* start after expansion */
+             romanticGlow 1s 0.8s ease-in-out forwards; /* start after expansion */
 }
 
 /* 🌸 Smooth transition: yellow → final pink-red */
@@ -562,7 +562,7 @@
   margin-top: 40px; /* gap between greeting and cream section */
   
   /* Fill remaining page height */
-  min-height: calc(100vh - 40px); /* full viewport height minus gap */
+  min-height: auto; /* full viewport height minus gap */
   
   display: flex;
   justify-content: center;
@@ -654,3 +654,140 @@
 .garland .flag:nth-child(8) { border-top-color: #ff9800; }
 .garland .flag:nth-child(9) { border-top-color: #f44336; }
 .garland .flag:nth-child(10) { border-top-color: #4caf50; }
+
+
+
+
+/* Second section only */
+.second-section {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 60px 0;           /* vertical spacing */
+  background-color: #e0f7fa; /* soft cyan */
+}
+
+/* Box inside second section */
+.second-section .extra-box {
+  max-width: 600px;
+  width: 90%;
+  padding: 28px 36px;
+  border-radius: 20px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+  text-align: center;
+  background-color: #b3e5fc; /* light blue box */
+  color: #01579b;
+}
+
+
+
+
+
+.second-section {
+  position: relative; /* default is fine */
+  opacity: 1;         /* no transition */
+  transform: translateY(0);
+}
+.second-section {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 700ms ease, transform 700ms ease;
+}
+
+.page.activated .second-section {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.1s ease, transform 0.1s ease;
+}
+
+
+.garland {
+  position: fixed; /* stays in viewport corners */
+}
+
+
+
+
+
+/* Base garland for desktop (horizontal) */
+.garland {
+  position: fixed;
+  display: flex;
+  gap: 4px;
+  z-index: 15;
+}
+
+/* Desktop: horizontal at top corners (no change) */
+.garland.top-left {
+  top: 0;
+  left: 0;
+  flex-direction: row;
+  transform: rotate(-10deg);
+}
+
+.garland.top-right {
+  top: 0;
+  right: 0;
+  flex-direction: row-reverse;
+  transform: rotate(10deg);
+}
+
+/* Mobile: vertical along edges, pointing inward */
+@media (max-width: 480px) {
+  /* Container for vertical garlands */
+  .garland.top-left,
+  .garland.top-right {
+    position: fixed;        /* stick to screen edges */
+    top: 0;
+    bottom: 0;
+    width: 32px;            /* slightly larger for bigger flags */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* fill full height */
+    align-items: center;
+    z-index: 20;
+    padding: 0;
+  }
+
+  /* Left garland on left edge */
+  .garland.top-left {
+    left: 10px;
+    transform: rotate(0deg);
+    
+  }
+
+  /* Right garland on right edge */
+  .garland.top-right {
+    right: 10px;
+    transform: rotate(0deg);
+  }
+
+  /* Flags as triangles pointing inward */
+  .garland .flag {
+    width: 0;
+    height: 0;
+    border-left: 32px solid transparent;  /* larger triangle */
+    border-right: 32px solid transparent;
+    border-top: 40px solid red;           /* triangle color */
+    transform-origin: center;
+  }
+
+
+  /* Rotate flags 180° so they point inward */
+  .garland.top-left .flag {
+    transform: rotate(-85deg);  /* points right */
+  }
+
+  .garland.top-right .flag {
+    transform: rotate(85deg);    /* points left */
+  }
+
+  /* Increase number of flags to fill screen */
+  .garland.top-left .flag,
+  .garland.top-right .flag {
+    flex: 1; /* each flag stretches equally to touch top/bottom edges */
+  }
+}
+
+ 
