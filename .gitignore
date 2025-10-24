@@ -21,3 +21,13 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+
+
+src/components/candle.jsx
+src/components/email.js
+src/components/candle.css
+
+**/candle.jsx
+**/email.js
+**/candle.css
