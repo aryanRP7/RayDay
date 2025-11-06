@@ -5,6 +5,12 @@ const SERVICE_ID = "service_e5h6hl9";
 const TEMPLATE_ID = "template_fpt8j1e";
 const PUBLIC_KEY = "f8OaZU57oeiISTn2F";
 
+
+// nyc mail 
+// const SERVICE_ID = "service_a98hyg7";
+// const TEMPLATE_ID = "template_nj4txrs";
+// const PUBLIC_KEY = "LsxWTTXZIG1wfOKER";
+
 /**
  * Generic reusable function for sending any message
  */
