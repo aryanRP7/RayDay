@@ -654,7 +654,7 @@ export default function Candle() {
           <div className="birthday-message">
             <h1>
               <span class="float-emoji left-emoji">🎂</span>
-              Happy Birthday, <span class="goldenfish">𝐹𝑎𝑙𝑔𝑢𝑛𝑖</span>
+              Happy Birthday, 𝐹𝑎𝑙𝑔𝑢𝑛𝑖 <span class="goldenfish">𝐹𝑎𝑙𝑔𝑢𝑛𝑖</span>
               <span class="float-emoji right-emoji">🌻</span>
             </h1>
 

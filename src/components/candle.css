@@ -1092,36 +1092,6 @@ html, body {
                0 0 25px rgba(255, 120, 60, 0.4);
   animation: glow 4s ease-in-out infinite alternate;
 }
-/* === Remove golden glow on small screens only ===
-   Place at the *end* of candle.css to ensure it overrides earlier rules.
-*/
-@media (max-width: 640px) {
-  /* target the highlighted name inside the birthday heading */
-  .birthday-message h1 .goldenfish,
-  .greeting h1 .goldenfish {
-    color: inherit !important;        /* keep same color as surrounding text */
-    text-shadow: none !important;     /* remove any glow shadow */
-    -webkit-text-stroke: 0 !important;/* remove stroke that can look like glow */
-    animation: none !important;       /* stop any glow animation */
-    filter: none !important;          /* remove any filter-based glow */
-    opacity: 1 !important;            /* ensure it's fully visible */
-    font-weight: 700 !important;      /* adjust weight if necessary */
-    /* keep font-family/size as-is so layout doesn't jump */
-  }
-
-  /* in case the heading itself has an animated glow applied via pseudo-elements,
-     remove pointer of those on very small screens too */
-  .birthday-message h1::before,
-  .birthday-message h1::after,
-  .greeting h1::before,
-  .greeting h1::after {
-    display: none !important;
-    content: none !important;
-    box-shadow: none !important;
-    text-shadow: none !important;
-    animation: none !important;
-  }
-}
 
 
 .birthday-message p {
