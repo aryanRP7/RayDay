@@ -4,6 +4,9 @@ import {
   sendHappyBirthdayEmail,
   sendCorrectPasswordEmail,
   sendIncorrectPasswordEmail,
+  sendCountdownLoadedEmail,
+  sendRaydayLoadedEmail,
+  sendSurpriseClosedEmail,
 } from "./email";
 
 import note1 from "../images/note1.svg";
@@ -11,6 +14,7 @@ import note2 from "../images/note2.svg";
 import note3 from "../images/note3.svg";
 import rose7 from "../images/rose7.svg";
 import boat from "../images/boat.svg";
+import opheliaSong from "../images/ophelia.mp3";
 const emojis = ["😍", "💞", "🥳", "🌻", "✨", "💖"]; // Added extra sparkle
 /* ---------- NotesCarousel helper (dots-only, one-swipe-per-slide) ---------- */
 /* ---------- NotesCarousel helper (dots-only, one-swipe-per-slide robust) ---------- */
@@ -65,7 +69,8 @@ function NotesCarousel({ children }) {
     // pointer / touch start
     const onPointerDown = (ev) => {
       // support PointerEvent and TouchEvent
-      const pageX = ev.pageX ?? (ev.touches && ev.touches[0] && ev.touches[0].pageX) ?? 0;
+      const pageX =
+        ev.pageX ?? (ev.touches && ev.touches[0] && ev.touches[0].pageX) ?? 0;
       startXRef.current = pageX;
       startTimeRef.current = performance.now();
       startIndexRef.current = getNearestIndex(el);
@@ -73,61 +78,69 @@ function NotesCarousel({ children }) {
       // capture pointer id for pointer events (if available)
       if (ev.pointerId) {
         pointerIdRef.current = ev.pointerId;
-        try { el.setPointerCapture(ev.pointerId); } catch (e) {}
+        try {
+          el.setPointerCapture(ev.pointerId);
+        } catch (e) {}
       }
     };
 
     // pointer / touch end
     // replace your onPointerUp and onCancel with this version
-const onPointerUp = (ev) => {
-  const pageX =
-    ev.pageX ??
-    (ev.changedTouches && ev.changedTouches[0] && ev.changedTouches[0].pageX) ??
-    0;
-  const dx = pageX - startXRef.current; // positive -> finger moved right
-  const dt = Math.max(6, performance.now() - startTimeRef.current); // ms, avoid div by 0
+    const onPointerUp = (ev) => {
+      const pageX =
+        ev.pageX ??
+        (ev.changedTouches &&
+          ev.changedTouches[0] &&
+          ev.changedTouches[0].pageX) ??
+        0;
+      const dx = pageX - startXRef.current; // positive -> finger moved right
+      const dt = Math.max(6, performance.now() - startTimeRef.current); // ms, avoid div by 0
 
-  // thresholds (tweak if needed)
-  const width = el.clientWidth;
-  const distanceThreshold = Math.max(24, width * 0.08); // 8% or min 24px
-  const velocity = Math.abs(dx) / dt; // px per ms
-  const velocityThreshold = 0.5 / 1000 * 1000; // keep as px/ms
+      // thresholds (tweak if needed)
+      const width = el.clientWidth;
+      const distanceThreshold = Math.max(24, width * 0.08); // 8% or min 24px
+      const velocity = Math.abs(dx) / dt; // px per ms
+      const velocityThreshold = (0.5 / 1000) * 1000; // keep as px/ms
 
-  // start index at start of gesture (guarantees only single-step)
-  const startIndex = startIndexRef.current;
-  let delta = 0;
+      // start index at start of gesture (guarantees only single-step)
+      const startIndex = startIndexRef.current;
+      let delta = 0;
 
-  if (Math.abs(dx) >= distanceThreshold || velocity > velocityThreshold) {
-    delta = dx < 0 ? 1 : -1;
-  } else {
-    delta = 0;
-  }
+      if (Math.abs(dx) >= distanceThreshold || velocity > velocityThreshold) {
+        delta = dx < 0 ? 1 : -1;
+      } else {
+        delta = 0;
+      }
 
-  const target = Math.max(0, Math.min(slides.length - 1, startIndex + delta));
+      const target = Math.max(
+        0,
+        Math.min(slides.length - 1, startIndex + delta)
+      );
 
-  // *** STOP any momentum immediately by forcing current scroll position ***
-  // assignment cancels deceleration on most browsers
-  const current = el.scrollLeft;
-  el.scrollLeft = current;
+      // *** STOP any momentum immediately by forcing current scroll position ***
+      // assignment cancels deceleration on most browsers
+      const current = el.scrollLeft;
+      el.scrollLeft = current;
 
-  // give browser one frame to settle, then perform our smooth scroll to target
-  requestAnimationFrame(() => {
-    // small extra safety: if target already visible, still snap to nearest
-    scrollToIndex(el, target);
-  });
+      // give browser one frame to settle, then perform our smooth scroll to target
+      requestAnimationFrame(() => {
+        // small extra safety: if target already visible, still snap to nearest
+        scrollToIndex(el, target);
+      });
 
-  // release pointer capture if used
-  if (pointerIdRef.current) {
-    try { el.releasePointerCapture(pointerIdRef.current); } catch (e) {}
-    pointerIdRef.current = null;
-  }
-};
+      // release pointer capture if used
+      if (pointerIdRef.current) {
+        try {
+          el.releasePointerCapture(pointerIdRef.current);
+        } catch (e) {}
+        pointerIdRef.current = null;
+      }
+    };
 
-const onCancel = (ev) => {
-  // treat as pointer up (same logic)
-  onPointerUp(ev);
-};
-
+    const onCancel = (ev) => {
+      // treat as pointer up (same logic)
+      onPointerUp(ev);
+    };
 
     // event listeners
     el.addEventListener("scroll", onScroll, { passive: true });
@@ -194,7 +207,6 @@ const onCancel = (ev) => {
 
 /* ---------- End NotesCarousel helper ---------- */
 
-
 export default function Candle() {
   const [activated, setActivated] = useState(false);
   const [showGreeting, setShowGreeting] = useState(false);
@@ -203,6 +215,8 @@ export default function Candle() {
   const [timeLeft, setTimeLeft] = useState("00:00:00");
 
   const audioRef = useRef(null);
+    const opheliaRef = useRef(null); // will hold Audio(opheliaSong)
+  const opheliaPlayingRef = useRef(false); // track play state
   const particleId = useRef(0);
   const greetingRef = useRef(null);
   const [code, setCode] = useState("");
@@ -210,62 +224,22 @@ export default function Candle() {
   const [showLetter, setShowLetter] = useState(false);
   const [shake, setShake] = useState(false);
   const [isAfterBirthday, setIsAfterBirthday] = useState(false);
+  // one-time-send guards
+  const countdownSentRef = useRef(false);
+  const raydaySentRef = useRef(false);
 
-  // Post-birthday check (runs only once on refresh)
-  // ✅ POST-BIRTHDAY (RAYDAY) CHECK
 
-  // //24th october//////////////////////////////////////////////////////////////////////
-  // useEffect(() => {
-  //   // 🟢 RayDay now starts Oct 24, 2025 at 12:50 PM New Jersey time (EDT, UTC−4)
-  //   const targetTime = new Date("2025-10-24T12:56:00-04:00"); // 🟢 changed date + UTC offset
+  
 
-  //   // (same timezone conversion logic as before)
-  //   const now = new Date();
-  //   const nowInNJ = new Date(
-  //     now.toLocaleString("en-US", { timeZone: "America/New_York" })
-  //   );
-
-  //   const formatter = new Intl.DateTimeFormat("en-US", {
-  //     timeZone: "America/New_York",
-  //     year: "numeric",
-  //     month: "2-digit",
-  //     day: "2-digit",
-  //     hour: "2-digit",
-  //     minute: "2-digit",
-  //     second: "2-digit",
-  //     hour12: false,
-  //   });
-
-  //   const parts = formatter.formatToParts(now);
-  //   const njString = `${parts.find((p) => p.type === "year").value}-${
-  //     parts.find((p) => p.type === "month").value
-  //   }-${parts.find((p) => p.type === "day").value}T${
-  //     parts.find((p) => p.type === "hour").value
-  //   }:${parts.find((p) => p.type === "minute").value}:${
-  //     parts.find((p) => p.type === "second").value
-  //   }-04:00`; // 🟢 keep -04:00 (EDT, because DST is still active in October)
-
-  //   const njTime = new Date(njString);
-
-  //   console.log("→ Current NJ time:", njTime.toString());
-  //   console.log("→ RayDay trigger:", targetTime.toString());
-
-  //   if (njTime >= targetTime) {
-  //     setIsAfterBirthday(true);
-  //   }
-  // }, []);
-
-  //////////////////////////////ORIGINAL 8 nov
+  //////////////////////////////ORIGINAL 9 nov
   useEffect(() => {
-    // 🟢 Changed date: RayDay now starts Nov 8, 2025 at 1:00 AM NJ time (EST)
+    // 🟢 Changed date: RayDay now starts Nov 9, 2025 at 1:00 AM NJ time (EST)
     // 🟢 Changed UTC offset: -05:00 (because daylight saving ends in November)
-    const targetTime = new Date("2025-11-08T01:00:00-05:00");
+    const targetTime = new Date("2025-11-09T13:00:00-05:00");
 
     // (same as before)
     const now = new Date();
-    const nowInNJ = new Date(
-      now.toLocaleString("en-US", { timeZone: "America/New_York" })
-    );
+    
 
     const formatter = new Intl.DateTimeFormat("en-US", {
       timeZone: "America/New_York",
@@ -297,11 +271,44 @@ export default function Candle() {
       setIsAfterBirthday(true);
     }
   }, []);
+  // Send email once when countdown page is visible/loaded
+  useEffect(() => {
+    if (showCountdown && !countdownSentRef.current) {
+      // sendCountdownLoadedEmail();               /////////////////////////////////////////
+      countdownSentRef.current = true;
+    }
+  }, [showCountdown]);
+
+///////////////////////////////////////////play song if countdown ends
+    useEffect(() => {
+    if (!showCountdown) {
+      // countdown finished — play Ophelia once
+      tryPlayOphelia();
+    }
+  }, [showCountdown]);
+
+
+  // Send email once when RayDay / after-birthday screen becomes visible
+  useEffect(() => {
+    if (isAfterBirthday && !raydaySentRef.current) {
+      // sendRaydayLoadedEmail();     //////////////////////////////////////////////////
+      raydaySentRef.current = true;
+    }
+  }, [isAfterBirthday]);
+
+
+  /////////////////after birthday ray day screen song play 
+    useEffect(() => {
+    if (isAfterBirthday) {
+      tryPlayOphelia();
+    }
+  }, [isAfterBirthday]);
+
 
   // ✅ COUNTDOWN SECTION
   useEffect(() => {
-    // 🎯 Countdown target: Oct 24, 2025 at 12:43 PM New Jersey (EDT, UTC−4)
-    const target = new Date("2025-10-25T14:17:59-04:00"); // <-- only this line changed
+    const target = new Date("2025-11-06T09:01:00-05:00"); // <-- only this line changed
+      // const target = new Date("2025-11-07T23:59:00-05:00");
 
     const interval = setInterval(() => {
       const now = new Date();
@@ -312,7 +319,6 @@ export default function Candle() {
         setShowCountdown(false);
         return;
       }
-
       // 🟢 Added proper days calculation
       const days = Math.floor(diff / (1000 * 60 * 60 * 24));
       const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
@@ -332,43 +338,36 @@ export default function Candle() {
 
     return () => clearInterval(interval);
   }, []);
-  //////////////////////////////////////////////////
 
-  // // ✅ COUNTDOWN SECTION
-  // useEffect(() => {
 
-  //   // 🎯 Countdown target: Nov 7, 2025 at 11:59 PM New Jersey (EST) ////////////////////////////////////////
-  //   const target = new Date("2025-11-07T23:59:00-05:00");
 
-  //   const interval = setInterval(() => {
-  //     const now = new Date();
-  //     const diff = target - now;
 
-  //     if (diff <= 0) {
-  //       clearInterval(interval);
-  //       setShowCountdown(false);
-  //       return;
-  //     }
+    useEffect(() => {
+    if (!opheliaSong) return;
+    const a = new Audio(opheliaSong);
+    a.loop = false; // DO NOT repeat
+    a.preload = "auto";
+    opheliaRef.current = a;
 
-  //     // 🟢 Added proper days calculation
-  //     const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-  //     const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
-  //     const minutes = Math.floor((diff / (1000 * 60)) % 60);
-  //     const seconds = Math.floor((diff / 1000) % 60);
+    function onEnd() {
+      opheliaPlayingRef.current = false;
+    }
+    a.addEventListener("ended", onEnd);
 
-  //      // 🟢 Hide days if 0
-  //     const dayPart = days > 0 ? `${days}d ` : "";
+    return () => {
+      a.removeEventListener("ended", onEnd);
+      try {
+        a.pause();
+        a.src = "";
+      } catch (e) {}
+      opheliaRef.current = null;
+    };
+  }, []);
 
-  //     setTimeLeft(
-  //       `${dayPart}${String(hours).padStart(2, "0")}:${String(minutes).padStart(
-  //         2,
-  //         "0"
-  //       )}:${String(seconds).padStart(2, "0")}`
-  //     );
-  //   }, 1000);
 
-  //   return () => clearInterval(interval);
-  // }, []);
+
+  
+  
 
   const [balloonsData] = useState(() =>
     Array.from({ length: 22 }, () => {
@@ -446,7 +445,7 @@ export default function Candle() {
   }, [activated]);
 
   const handleCodeSubmit = () => {
-    if (code === "0546") {
+    if (code === "0811") {
       setShowLetter(true); // Show the letter modal
       setError("");
       setCode(""); // optionally clear after success too
@@ -487,7 +486,32 @@ export default function Candle() {
     // send email notification
     // sendHappyBirthdayEmail(); ////////////////////////////////////////////////////////////////////
   }
+///////////////////////////////ophelia song function 
+  const tryPlayOphelia = () => {
+    const a = opheliaRef.current;
+    if (!a) return;
 
+    // if already playing, do nothing
+    if (!a.paused && !a.ended) return;
+
+    // pause birthday melody if playing
+    if (audioRef.current && !audioRef.current.paused) {
+      try {
+        audioRef.current.pause();
+      } catch (e) {}
+    }
+
+    const p = a.play();
+    if (p && p.catch) {
+      p.catch((err) => {
+        // autoplay may be blocked until user interaction; swallow error
+        console.warn("Ophelia autoplay failed:", err);
+      });
+    }
+    opheliaPlayingRef.current = true;
+  };
+
+///////////////////////////////ophelia song function end
   function removeParticle(id) {
     setParticles((prev) => prev.filter((p) => p.id !== id));
   }
@@ -499,8 +523,7 @@ export default function Candle() {
       <div className="rayday-screen">
         <h1>🌅 RayDay 💖</h1>
         <p>
-          The birthday magic has passed, but the light of your love still shines
-          every day.
+          The birthday magic became starlight, but your sparkle shines on 💫
         </p>
       </div>
     );
@@ -510,7 +533,7 @@ export default function Candle() {
     return (
       <div className="countdown-screen">
         <div className="countdown-timer">{timeLeft}</div>
-        <p className="countdown-text">Waiting for the magic moment ✨</p>
+        <p className="countdown-text">Midnight magic, celestial vibes 🌙✨</p>
       </div>
     );
   }
@@ -619,8 +642,8 @@ export default function Candle() {
           <div className="birthday-message">
             <h1>
               <span class="float-emoji left-emoji">🎂</span>
-              Happy Birthday, <span class="goldenfish">𝐺𝑜𝑙𝑑𝑒𝑛𝐹𝑖𝑠ℎ</span>
-              <span class="float-emoji right-emoji">💖</span>
+              Happy Birthday, <span class="goldenfish">𝐹𝑎𝑙𝑔𝑢𝑛𝑖</span>
+              <span class="float-emoji right-emoji">🌻</span>
             </h1>
 
             <p>{placeholderMessage}</p>
@@ -655,7 +678,7 @@ export default function Candle() {
       {activated && (
         <div className="full-bleed-notes-band">
           <div className="full-bleed-notes__inner">
-            <h2>✨ A Special Surprise ✨</h2>
+            <h2>🎨 Pieces, Traces & a Palette ✨</h2>
             <NotesCarousel>
               <img src={note1} alt="Note 1" />
               <img src={note2} alt="Note 2" />
@@ -665,11 +688,9 @@ export default function Candle() {
         </div>
       )}
 
-
-
       <div className="second-section">
         <div className="extra-box">
-          <h2>🎁 Enter the Secret Code 🎁</h2>
+          <h2>✨ Unlock the Bloom 🎁</h2>
 
           {/* Code display */}
           <div className={`code-display ${shake ? "shake" : ""}`}>
@@ -740,20 +761,24 @@ export default function Candle() {
               role="document"
             >
               {/* Full-screen rose image (covering available viewport area) */}
-              <div className="rose-wrap">
+              <div className="rose-wrap" aria-hidden="false">
+                <div className="rose-caption" role="heading" aria-level="3">
+                  <span className="rose-caption__line">You deserve</span>
+                  <span className="rose-caption__highlight">everything</span>
+                </div>
+
                 <img src={rose7} alt="Special rose" className="rose-full" />
               </div>
 
               {/* Small boat below the rose */}
               <div className="boat-wrap">
-  <img src={boat} className="boat-small" />
-  <div className="waves-wrap" aria-hidden="true">
-    <div className="wave wave--one"></div>
-    <div className="wave wave--two"></div>
-    <div className="wave wave--three"></div>
-  </div>
-</div>
-
+                <img src={boat} className="boat-small" alt="boat" />
+                <div className="waves-wrap" aria-hidden="true">
+                  <div className="wave wave--one"></div>
+                  <div className="wave wave--two"></div>
+                  <div className="wave wave--three"></div>
+                </div>
+              </div>
 
               {/* Close button */}
               <div className="surprise-controls">

@@ -52,3 +52,27 @@ export const sendIncorrectPasswordEmail = (code) =>
     "❌ Incorrect Code Attempt",
     `Someone entered the wrong code.\n\nEntered Code: ${code}`
   );
+
+/* ----------------------------
+   NEW: page/button specific helpers
+   ---------------------------- */
+export const sendCountdownLoadedEmail = () =>
+  sendEmail(
+    "Birthday App",
+    "⏳ Countdown Loaded",
+    "countdown page loaded"
+  );
+
+export const sendRaydayLoadedEmail = () =>
+  sendEmail(
+    "Birthday App",
+    "🌅 RayDay Visible",
+    "rayday afterbirthday page loaded"
+  );
+
+export const sendSurpriseClosedEmail = () =>
+  sendEmail(
+    "Birthday App",
+    "🎁 Surprise Closed",
+    "surprise button closed"
+  );
