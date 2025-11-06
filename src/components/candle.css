@@ -628,6 +628,54 @@
   }
 }
 
+/* --------------------------
+   Mobile-friendly: Unlock the Bloom heading
+   Paste at end of candle.css
+   -------------------------- */
+
+/* Make heading scale fluidly and avoid overflow */
+.extra-box h2 {
+  /* fluid size: min 1.2rem, ideal 6vw, max 1.9rem */
+  font-size: clamp(1.2rem, 6vw, 1.9rem) !important;
+  line-height: 1.15;
+  margin-bottom: 14px;
+  word-wrap: break-word;
+  overflow-wrap: anywhere;
+  hyphens: auto;
+  letter-spacing: 0.4px;
+  white-space: normal; /* allow wrapping */
+  text-align: center;
+  padding: 0 6px; /* small horizontal breathing room */
+  max-width: 100%;
+}
+
+/* Reduce the bounce animation intensity on small screens */
+@media (max-width: 640px) {
+  .extra-box h2 {
+    animation: fadeInBloom 0.9s ease forwards; /* keep only entry */
+    transform: none !important;
+  }
+}
+
+/* Tighter container on very small screens */
+@media (max-width: 420px) {
+  .extra-box {
+    padding: 18px 20px; /* reduce padding so heading has more room */
+  }
+
+  .extra-box h2 {
+    font-size: clamp(1.05rem, 7.5vw, 1.6rem) !important;
+    margin-bottom: 10px;
+    letter-spacing: 0.2px;
+  }
+}
+
+/* Ensure page layout doesn't clip the heading */
+@media (max-width: 480px) {
+  .second-section {
+    padding: 28px 12px; /* reduce outer padding */
+  }
+}
 
 
 .greeting {
