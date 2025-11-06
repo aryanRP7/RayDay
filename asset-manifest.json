@@ -1,18 +1,18 @@
 {
   "files": {
-    "main.css": "/RayDay/static/css/main.593adc44.css",
-    "main.js": "/RayDay/static/js/main.2e1c74bf.js",
+    "main.css": "/RayDay/static/css/main.d2596dd4.css",
+    "main.js": "/RayDay/static/js/main.c2bcd432.js",
     "static/js/453.600b0b09.chunk.js": "/RayDay/static/js/453.600b0b09.chunk.js",
     "static/media/note2.svg": "/RayDay/static/media/note2.404be1e45e02eb7e7d6264c461273523.svg",
     "static/media/note1.svg": "/RayDay/static/media/note1.244efe30c459e94ee2766346449e1133.svg",
     "static/media/note3.svg": "/RayDay/static/media/note3.689c9cb300764e30649feb718636492f.svg",
     "index.html": "/RayDay/index.html",
-    "main.593adc44.css.map": "/RayDay/static/css/main.593adc44.css.map",
-    "main.2e1c74bf.js.map": "/RayDay/static/js/main.2e1c74bf.js.map",
+    "main.d2596dd4.css.map": "/RayDay/static/css/main.d2596dd4.css.map",
+    "main.c2bcd432.js.map": "/RayDay/static/js/main.c2bcd432.js.map",
     "453.600b0b09.chunk.js.map": "/RayDay/static/js/453.600b0b09.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.593adc44.css",
-    "static/js/main.2e1c74bf.js"
+    "static/css/main.d2596dd4.css",
+    "static/js/main.c2bcd432.js"
   ]
 }
