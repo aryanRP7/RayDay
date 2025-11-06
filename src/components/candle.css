@@ -1116,7 +1116,7 @@ html, body {
 }
 
 /* warm glowing text animation (you already use this in RayDay) */
-@keyframes glow {
+/* @keyframes glow {
   from {
     text-shadow: 0 0 12px rgba(255, 180, 120, 0.6),
                  0 0 25px rgba(255, 120, 60, 0.4);
@@ -1125,23 +1125,7 @@ html, body {
     text-shadow: 0 0 30px rgba(255, 220, 160, 0.9),
                  0 0 60px rgba(255, 140, 70, 0.8);
   }
-}
-/* === Remove golden glow from "Falguni" and make it bold === */
-.birthday-message h1 .goldenfish {
-  text-shadow: none !important;       /* remove glow */
-  animation: none !important;         /* stop the glow animation */
-  -webkit-text-stroke: 0 !important;  /* remove any outline effect */
-  filter: none !important;
-  color: #d93f70 !important;          /* romantic rose-red color */
-  font-weight: 900 !important;        /* make it bold */
-}
-.birthday-message h1 .goldenfish {
-  text-shadow: none !important;
-  animation: none !important;
-  -webkit-text-stroke: 0 !important;
-  color: inherit !important;     /* same color as other text */
-  font-weight: 900 !important;   /* extra bold */
-}
+} */
 
 
 
