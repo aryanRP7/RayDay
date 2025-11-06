@@ -9,9 +9,9 @@ import {
   sendSurpriseClosedEmail,
 } from "./email";
 
-// import note1 from "../images/note1.svg";
-// import note2 from "../images/note2.svg";
-// import note3 from "../images/note3.svg";
+import note1 from "../images/note1.svg";
+import note2 from "../images/note2.svg";
+import note3 from "../images/note3.svg";
 // import rose7 from "../images/rose7.svg";
 // import boat from "../images/boat.svg";
 
@@ -23,9 +23,9 @@ const emojis = ["😍", "💞", "🥳", "🌻", "✨", "💖"]; // Added extra s
 /* ---------- NotesCarousel helper (robust: exactly one slide per swipe) ---------- */
 // Candle.jsx (top of file)
 const base = process.env.PUBLIC_URL || "";
-const note1 = `${base}/images/note1.svg`;
-const note2 = `${base}/images/note2.svg`;
-const note3 = `${base}/images/note3.svg`;
+// const note1 = `${base}/images/note1.svg`;
+// const note2 = `${base}/images/note2.svg`;
+// const note3 = `${base}/images/note3.svg`;
 const rose7 = `${base}/images/rose7.svg`;
 const boat = `${base}/images/boat.svg`;
 const opheliaSong = `${base}/images/ophelia.mp3`; // 👈 add this line
