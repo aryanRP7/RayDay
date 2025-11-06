@@ -11,7 +11,7 @@ import rose1 from "../images/rose1.png";
 import note1 from "../images/note1.png";
 import note2 from "../images/note2.png";
 import note3 from "../images/note3.png";
-import rose7 from "../images/rose7.png";
+import rose7 from "../images/rose7.svg";
 import rose8 from "../images/rose8.png";
 import boat from "../images/boat.png";
 const emojis = ["😍", "💞", "🥳", "🌻", "✨", "💖"]; // Added extra sparkle
