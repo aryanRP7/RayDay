@@ -1993,9 +1993,14 @@ touch-action: pan-x;             /* ensure horizontal pan only */
 
 /* Responsive scaling */
 @media (max-width: 640px) {
-  .rose-caption__line { font-size: 24px; }
+  .rose-caption__line { font-size: 25px; }
   .rose-caption__highlight { font-size: 16px; }
   .rose-caption { top: 6%; padding: 6px 10px; }
+}
+@media (max-width: 420px) {
+  .rose-caption__line {
+    font-size: clamp(26px, 7vw, 30px); /* scales dynamically by screen width */
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
