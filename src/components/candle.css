@@ -1081,7 +1081,7 @@ html, body {
 .birthday-message {
   text-align: center;
   font-family: 'Poppins', sans-serif;
-  color: #ffd9a3;
+  /* color: #ffd9a3; */
   animation: fadeInUp 2.5s ease both;
 }
 
@@ -2006,3 +2006,5 @@ touch-action: pan-x;             /* ensure horizontal pan only */
 @media (prefers-reduced-motion: reduce) {
   .rose-caption { animation: none; transform: translateX(-50%); }
 }
+
+
