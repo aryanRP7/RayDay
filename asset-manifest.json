@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/RayDay/static/css/main.2f738154.css",
-    "main.js": "/RayDay/static/js/main.5de8aca2.js",
+    "main.css": "/RayDay/static/css/main.593adc44.css",
+    "main.js": "/RayDay/static/js/main.2332a3de.js",
     "static/js/453.600b0b09.chunk.js": "/RayDay/static/js/453.600b0b09.chunk.js",
     "index.html": "/RayDay/index.html",
-    "main.2f738154.css.map": "/RayDay/static/css/main.2f738154.css.map",
-    "main.5de8aca2.js.map": "/RayDay/static/js/main.5de8aca2.js.map",
+    "main.593adc44.css.map": "/RayDay/static/css/main.593adc44.css.map",
+    "main.2332a3de.js.map": "/RayDay/static/js/main.2332a3de.js.map",
     "453.600b0b09.chunk.js.map": "/RayDay/static/js/453.600b0b09.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.2f738154.css",
-    "static/js/main.5de8aca2.js"
+    "static/css/main.593adc44.css",
+    "static/js/main.2332a3de.js"
   ]
 }
