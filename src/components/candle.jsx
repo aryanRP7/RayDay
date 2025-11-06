@@ -15,8 +15,6 @@ import note3 from "../images/note3.svg";
 // import rose7 from "../images/rose7.svg";
 // import boat from "../images/boat.svg";
 
-// import opheliaSong from "../images/ophelia.mp3";
-
 const emojis = ["😍", "💞", "🥳", "🌻", "✨", "💖"]; // Added extra sparkle
 /* ---------- NotesCarousel helper (dots-only, one-swipe-per-slide) ---------- */
 /* ---------- NotesCarousel helper (dots-only, one-swipe-per-slide robust) ---------- */
@@ -28,8 +26,6 @@ const base = process.env.PUBLIC_URL || "";
 // const note3 = `${base}/images/note3.svg`;
 const rose7 = `${base}/images/rose7.svg`;
 const boat = `${base}/images/boat.svg`;
-const opheliaSong = `${base}/images/ophelia.mp3`; // 👈 add this line
-
 
 function NotesCarousel({ children }) {
   const scrollerRef = useRef(null);
@@ -226,9 +222,6 @@ export default function Candle() {
   const [showCountdown, setShowCountdown] = useState(true);
   const [timeLeft, setTimeLeft] = useState("00:00:00");
 
-  const audioRef = useRef(null);
-    const opheliaRef = useRef(null); // will hold Audio(opheliaSong)
-  const opheliaPlayingRef = useRef(false); // track play state
   const particleId = useRef(0);
   const greetingRef = useRef(null);
   const [code, setCode] = useState("");
@@ -240,9 +233,6 @@ export default function Candle() {
   const countdownSentRef = useRef(false);
   const raydaySentRef = useRef(false);
 
-
-  
-
   //////////////////////////////ORIGINAL 9 nov
   useEffect(() => {
     // 🟢 Changed date: RayDay now starts Nov 9, 2025 at 1:00 AM NJ time (EST)
@@ -251,7 +241,6 @@ export default function Candle() {
 
     // (same as before)
     const now = new Date();
-    
 
     const formatter = new Intl.DateTimeFormat("en-US", {
       timeZone: "America/New_York",
@@ -291,15 +280,6 @@ export default function Candle() {
     }
   }, [showCountdown]);
 
-///////////////////////////////////////////play song if countdown ends
-    useEffect(() => {
-    if (!showCountdown) {
-      // countdown finished — play Ophelia once
-      tryPlayOphelia();
-    }
-  }, [showCountdown]);
-
-
   // Send email once when RayDay / after-birthday screen becomes visible
   useEffect(() => {
     if (isAfterBirthday && !raydaySentRef.current) {
@@ -308,19 +288,10 @@ export default function Candle() {
     }
   }, [isAfterBirthday]);
 
-
-  /////////////////after birthday ray day screen song play 
-    useEffect(() => {
-    if (isAfterBirthday) {
-      tryPlayOphelia();
-    }
-  }, [isAfterBirthday]);
-
-
   // ✅ COUNTDOWN SECTION
   useEffect(() => {
     const target = new Date("2025-11-06T09:01:00-05:00"); // <-- only this line changed
-      // const target = new Date("2025-11-07T23:59:00-05:00");
+    // const target = new Date("2025-11-07T23:59:00-05:00");
 
     const interval = setInterval(() => {
       const now = new Date();
@@ -350,36 +321,6 @@ export default function Candle() {
 
     return () => clearInterval(interval);
   }, []);
-
-
-
-
-    useEffect(() => {
-    if (!opheliaSong) return;
-    const a = new Audio(opheliaSong);
-    a.loop = false; // DO NOT repeat
-    a.preload = "auto";
-    opheliaRef.current = a;
-
-    function onEnd() {
-      opheliaPlayingRef.current = false;
-    }
-    a.addEventListener("ended", onEnd);
-
-    return () => {
-      a.removeEventListener("ended", onEnd);
-      try {
-        a.pause();
-        a.src = "";
-      } catch (e) {}
-      opheliaRef.current = null;
-    };
-  }, []);
-
-
-
-  
-  
 
   const [balloonsData] = useState(() =>
     Array.from({ length: 22 }, () => {
@@ -489,53 +430,27 @@ export default function Candle() {
   function handleFlameClick() {
     if (activated) return;
     setActivated(true);
-    if (audioRef.current) {
-      audioRef.current.currentTime = 0;
-      const p = audioRef.current.play();
-      if (p && p.catch) p.catch(() => {});
-    }
+
     setTimeout(() => setShowGreeting(true), 900);
     // send email notification
     // sendHappyBirthdayEmail(); ////////////////////////////////////////////////////////////////////
   }
-///////////////////////////////ophelia song function 
-  const tryPlayOphelia = () => {
-    const a = opheliaRef.current;
-    if (!a) return;
 
-    // if already playing, do nothing
-    if (!a.paused && !a.ended) return;
-
-    // pause birthday melody if playing
-    if (audioRef.current && !audioRef.current.paused) {
-      try {
-        audioRef.current.pause();
-      } catch (e) {}
-    }
-
-    const p = a.play();
-    if (p && p.catch) {
-      p.catch((err) => {
-        // autoplay may be blocked until user interaction; swallow error
-        console.warn("Ophelia autoplay failed:", err);
-      });
-    }
-    opheliaPlayingRef.current = true;
-  };
-
-///////////////////////////////ophelia song function end
   function removeParticle(id) {
     setParticles((prev) => prev.filter((p) => p.id !== id));
   }
 
-  const placeholderMessage =
-<p>
-  You bring so much light and laughter into every moment, filling it with good vibes.
-  <br />
-  Wishing you a birthday as cheerful as you are ~ full of joy, moments, wonderful surprises, and those everyday snaps bursting with energy.
-  <br />
-  Keep shining, keep smiling, and keep being you. 🌸
-</p>
+  const placeholderMessage = (
+    <p>
+      You bring so much light and laughter into every moment, filling it with
+      good vibes.
+      <br />
+      Wishing you a birthday as cheerful as you are ~ full of joy, moments,
+      wonderful surprises, and those everyday snaps bursting with energy.
+      <br />
+      Keep shining, keep smiling, and keep being you. 🌸
+    </p>
+  );
   if (isAfterBirthday) {
     return (
       <div className="rayday-screen">
@@ -587,12 +502,6 @@ export default function Candle() {
         ))}
       </div>
 
-      <audio
-        ref={audioRef}
-        src="/music/birthday-melody.mp3"
-        loop
-        preload="auto"
-      />
       <div className={`bloom ${activated ? "bloom-animate" : ""}`} />
 
       <div className="content">
