@@ -529,7 +529,13 @@ export default function Candle() {
   }
 
   const placeholderMessage =
-    "You bring so much light and laughter into every day, filling every moment with warmth. Wishing you a birthday as cheerful as you are, filled with joy, hugs, and wonderful surprises!";
+<p>
+  You bring so much light and laughter into every moment, filling it with good vibes.
+  <br />
+  Wishing you a birthday as cheerful as you are — full of joy, moments, wonderful surprises, and those everyday snaps bursting with energy.
+  <br />
+  Keep shining, keep smiling, and keep being you. 🌸
+</p>
   if (isAfterBirthday) {
     return (
       <div className="rayday-screen">
