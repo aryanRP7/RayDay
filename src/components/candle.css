@@ -1963,7 +1963,7 @@ touch-action: pan-x;             /* ensure horizontal pan only */
 .rose-caption__line {
   display: block;
   font-family: "Parisienne", "Dancing Script", cursive;
-  font-size: 28px;
+  font-size: 29px;
   color: #fff7f2;
   text-shadow: 0 3px 12px rgba(0,0,0,0.45);
   letter-spacing: 0.2px;
@@ -1993,7 +1993,7 @@ touch-action: pan-x;             /* ensure horizontal pan only */
 
 /* Responsive scaling */
 @media (max-width: 640px) {
-  .rose-caption__line { font-size: 14px; }
+  .rose-caption__line { font-size: 24px; }
   .rose-caption__highlight { font-size: 16px; }
   .rose-caption { top: 6%; padding: 6px 10px; }
 }
