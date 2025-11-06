@@ -1261,3 +1261,528 @@ html, body {
     50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%
   );
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* ---------------------------
+   Cream section + lavender boxes only around images
+   --------------------------- */
+
+/* Full section background — soft cream */
+.full-bleed-notes-band {
+  position: relative;
+  width: 100%;
+  box-sizing: border-box;
+  background-color: #fff8e7;   /* 🟡 cream background */
+  padding: 48px 0;
+  margin-top: 40px;
+  z-index: 20;
+  overflow: visible;
+}
+
+/* Inner container — no lavender here anymore */
+.full-bleed-notes__inner {
+  max-width: 1000px;
+  width: 92%;
+  margin: 0 auto;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+/* Title */
+.full-bleed-notes__inner > h2 {
+  margin: 0 0 24px;
+  color: #6a4d9f;
+  font-size: 1.3rem;
+}
+
+/* Row layout for images */
+.full-bleed-notes__row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 24px;
+  flex-wrap: nowrap;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+/* Each image wrapped in its own lavender box */
+.full-bleed-notes__img {
+  display: block;
+  flex: 1 1 calc((100% - 48px) / 3);
+  max-width: calc((100% - 48px) / 3);
+  width: 100%;
+  height: auto;
+  padding: 10px;                       /* inner spacing for lavender border area */
+  background-color: #e6e6fa;           /* 💜 lavender box only for image */
+  border-radius: 16px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+  transition: transform 220ms ease, box-shadow 220ms ease;
+  object-fit: cover;
+}
+
+/* Image hover effect */
+.full-bleed-notes__img:hover {
+  transform: translateY(-6px) scale(1.03);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+/* Stack vertically on mobile */
+/* ============================
+   Mobile carousel styles
+   Paste this at the END of candle.css
+   ============================ */
+
+/* Desktop/default behavior preserved by existing rules.
+   These rules only apply on small screens and won't change desktop/iPad layouts. */
+@media (max-width: 900px) {
+  /* Make the row a horizontal scroll container */
+  .full-bleed-notes__row.carousel,
+  .full-bleed-notes__row.carousel::-webkit-scrollbar {
+    display: block;
+  }
+
+  .full-bleed-notes__row.carousel {
+    display: block;                  /* container for inline slides */
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch; /* smooth scrolling on iOS */
+    scroll-snap-type: x mandatory;
+    white-space: nowrap;             /* force inline slides on one line */
+    padding: 12px 8px;               /* breathing room at edges */
+    margin: 0;                       /* reset any outer flex margins */
+    box-sizing: border-box;
+  }
+
+  /* Each image becomes an inline "slide" — width shows main card + a peek of next card */
+  .full-bleed-notes__row.carousel .full-bleed-notes__img {
+    display: inline-block;
+    vertical-align: top;
+    width: 86%;                      /* change to 100% to show full-bleed slides */
+    max-width: 92%;
+    margin-right: 6%;
+    height: auto;
+    scroll-snap-align: center;       /* snap slides to center */
+    box-sizing: border-box;
+    background-color: #e6e6fa;       /* keep lavender background */
+    border-radius: 14px;
+    padding: 10px;                   /* inner padding preserved */
+    transition: transform 180ms ease, box-shadow 180ms ease;
+    object-fit: cover;
+    scroll-snap-stop: always;        /* prevents skipping multiple snaps */
+overscroll-behavior-x: contain;  /* prevents page bounce/momentum propagation */
+touch-action: pan-x;             /* ensure horizontal pan only */
+
+  }
+
+  /* remove hover transform on touch devices (prevents jump when touching) */
+  .full-bleed-notes__row.carousel .full-bleed-notes__img:hover {
+    transform: none;
+  }
+
+  /* make sure the band doesn't expand too tall due to slide inline baseline */
+  .full-bleed-notes-band {
+    padding-bottom: 18px;
+  }
+
+  /* smaller tweak when only one slide (avoid excessive right margin) */
+  .full-bleed-notes__row.carousel .full-bleed-notes__img:last-child {
+    margin-right: 12px;
+  }
+
+  /* Controls: prev/next + dots */
+  .notes-carousel-wrap {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 6px 6px 0 6px;
+  }
+
+  .carousel-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 10px;
+    padding: 6px 6px 12px;
+  }
+
+  .carousel-prev,
+  .carousel-next {
+    appearance: none;
+    -webkit-appearance: none;
+    border: none;
+    background: rgba(255,255,255,0.88);
+    color: #6a4d9f;
+    font-size: 22px;
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 6px 14px rgba(0,0,0,0.08);
+    transition: transform 140ms ease, box-shadow 140ms ease;
+  }
+
+  .carousel-prev:active,
+  .carousel-next:active { transform: translateY(1px); }
+
+  .carousel-prev:focus,
+  .carousel-next:focus {
+    outline: 3px solid rgba(212,111,166,0.18);
+    outline-offset: 2px;
+  }
+
+  /* Dots */
+  .carousel-dots {
+    display: flex;
+    gap: 8px;
+  }
+
+  .carousel-dots .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(0,0,0,0.12);
+    padding: 0;
+    cursor: pointer;
+    box-shadow: none;
+  }
+
+  .carousel-dots .dot.active {
+    background: #d46fa6;
+    box-shadow: 0 2px 6px rgba(212,111,166,0.16);
+  }
+
+  /* Hide controls if there is just one slide (optional UX) */
+  .full-bleed-notes__row.carousel > .full-bleed-notes__img:only-child + .carousel-controls,
+  .full-bleed-notes__row.carousel:has(.full-bleed-notes__img:only-child) ~ .carousel-controls {
+    display: none;
+  }
+}
+
+/* On wider screens keep previous flex layout (desktop / iPad) — no changes needed.
+   But in case your earlier rules were overridden accidentally, ensure default flex returns */
+@media (min-width: 901px) {
+  .full-bleed-notes__row {
+    display: flex !important;
+    flex-wrap: nowrap;
+    gap: 24px;
+  }
+  .full-bleed-notes__img {
+    flex: 1 1 calc((100% - 48px) / 3);
+    max-width: calc((100% - 48px) / 3);
+    width: 100%;
+    padding: 10px;
+    border-radius: 16px;
+  }
+
+  /* hide the carousel control UI on desktop if it accidentally appears */
+  .notes-carousel-wrap .carousel-controls { display: none; }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* ---------------------------
+   FULL FINAL: Surprise modal (rose → boat → waves → close)
+   - Overlay lighter, inner card frosted
+   - Rose large, transparent behind image (no white box)
+   - Boat & waves share exact width via --boat-width
+   - Layered SVG waves sit directly under and touch the boat
+   - Responsive fallbacks included
+   --------------------------- */
+
+/* ---------- Overlay: frosted glass behind the entire modal ---------- */
+.full-screen-surprise {
+  position: fixed;
+  inset: 0;
+  z-index: 120;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 28px;
+  box-sizing: border-box;
+  background: rgba(255, 248, 238, 0.18); /* lighter so rose pops */
+  backdrop-filter: blur(10px) saturate(1.05);
+  -webkit-backdrop-filter: blur(10px) saturate(1.05);
+  overflow-y: auto;
+}
+
+/* ---------- Inner glass card (light frosted card) ---------- */
+/* Also defines the shared boat width variable used by boat + waves */
+.surprise-inner {
+  --boat-width: min(420px, 60%); /* shared width for boat and waves */
+  position: relative;
+  width: min(1120px, 98%);
+  max-width: 1120px;
+  margin: 28px auto;
+  padding: 16px; /* reduced padding to let rose be larger visually */
+  box-sizing: border-box;
+  background: linear-gradient(180deg, rgba(255,255,255,0.28), rgba(255,255,255,0.16));
+  border-radius: 18px;
+  box-shadow: 0 12px 40px rgba(20,20,30,0.20);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  overflow: visible;
+}
+
+/* ---------- Rose area: transparent behind image, show full image ---------- */
+.rose-wrap {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: transparent;    /* no white/frosted box behind the rose */
+  border-radius: 12px;
+  overflow: visible;
+  box-sizing: border-box;
+}
+
+.rose-full {
+  width: 100%;
+  height: auto;
+  max-height: 88vh;           /* large rose; adjust if needed */
+  object-fit: contain;        /* show full image; no cropping */
+  background: transparent;
+  border-radius: 12px;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.18);
+  display: block;
+  will-change: transform;
+}
+
+/* ---------- Boat (decorative) - uses shared --boat-width ---------- */
+/* ------------------------------
+  Boat + Waves (anchored, no negative margin)
+  Works with JSX:
+  <div class="boat-wrap">
+    <img class="boat-small" ... />
+    <div class="waves-wrap">
+      <div class="wave wave--one"></div>
+      <div class="wave wave--two"></div>
+      <div class="wave wave--three"></div>
+    </div>
+  </div>
+  ------------------------------ */
+
+/* ensure boat-wrap is anchor for absolute waves */
+.boat-wrap {
+  position: relative;   /* anchor for waves */
+  width: var(--boat-width); /* keep your shared width variable */
+  max-width: 100%;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  z-index: 3;           /* boat above waves */
+  pointer-events: none;
+}
+
+/* boat image */
+.boat-small {
+  width: 100%;
+  max-width: none;
+  height: auto;
+  display: block;
+  filter: drop-shadow(0 6px 12px rgba(0,0,0,0.25));
+  transform-origin: center;
+  animation: gentleBoat 4.5s cubic-bezier(.2,.9,.3,1) infinite;
+  
+
+}
+
+/* gentle boat bob (unchanged) */
+@keyframes gentleBoat {
+  0%   { transform: translateY(0) rotate(-0.4deg); }
+  50%  { transform: translateY(-6px) rotate(0.6deg); }
+  100% { transform: translateY(0) rotate(-0.4deg); }
+}
+
+/* waves-wrap is inside boat-wrap and anchored to its bottom */
+.waves-wrap {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 4px;           /* tweak 0..8px to perfectly touch your boat PNG */
+  width: 100%;           /* exactly same visible width as boat-wrap */
+  height: 110px;         /* visible height of the wave band (tweak to taste) */
+  overflow: hidden;      /* clip horizontally/vertically as needed */
+  pointer-events: none;
+  z-index: 1;            /* below boat image */
+  box-sizing: border-box;
+  /* everything else in your current code stays the same */
+  mask-image: linear-gradient(to right, transparent 0%, black 12%, black 88%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, black 12%, black 88%, transparent 100%);
+}
+
+/* wave elements inside — same structure you used before */
+.waves-wrap .wave {
+  position: absolute;
+  left: 50%;
+  top: 100%; /* baseline = bottom of waves-wrap */
+  /* lift arc upward so its top overlaps boat bottom */
+  transform: translateX(-50%) translateY(-78%);
+  width: 220%;   /* wide so horizontal translation looks smooth */
+  height: 220%;
+  background-repeat: repeat-x;
+  background-position: 0 bottom;
+  opacity: 0.6;
+  filter: blur(0.2px);
+  will-change: transform;
+}
+
+/* Wave visuals (SVG data-URIs reused) */
+.wave--one {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1600 200'%3E%3Cpath fill='%23cfefff' d='M0 100 C200 60 400 140 600 100 C800 60 1000 140 1200 100 C1400 60 1600 140 1600 140 L1600 200 L0 200 Z'/%3E%3C/svg%3E");
+  animation: waveMove1 10s linear infinite;
+  z-index: 3;
+  opacity: 0.48;
+}
+
+.wave--two {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1600 200'%3E%3Cpath fill='%23a8ddff' d='M0 110 C200 70 400 150 600 110 C800 70 1000 150 1200 110 C1400 70 1600 150 1600 150 L1600 200 L0 200 Z'/%3E%3C/svg%3E");
+  animation: waveMove2 16s linear infinite reverse;
+  z-index: 2;
+  opacity: 0.36;
+}
+
+.wave--three {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1600 200'%3E%3Cpath fill='%2398d1ff' d='M0 120 C200 80 400 160 600 120 C800 80 1000 160 1200 120 C1400 80 1600 160 1600 160 L1600 200 L0 200 Z'/%3E%3C/svg%3E");
+  animation: waveMove3 22s linear infinite;
+  z-index: 1;
+  opacity: 0.28;
+}
+
+/* horizontal motion — same as before (keeps arc vertical offset stable) */
+@keyframes waveMove1 {
+  0%   { transform: translateX(-50%) translateY(-78%) translateX(0%); }
+  100% { transform: translateX(-50%) translateY(-78%) translateX(-28%); }
+}
+@keyframes waveMove2 {
+  0%   { transform: translateX(-50%) translateY(-78%) translateX(0%); }
+  100% { transform: translateX(-50%) translateY(-78%) translateX(-34%); }
+}
+@keyframes waveMove3 {
+  0%   { transform: translateX(-50%) translateY(-78%) translateX(0%); }
+  100% { transform: translateX(-50%) translateY(-78%) translateX(-40%); }
+}
+
+/* small responsive tweaks to keep arcs visible on small screens */
+@media (max-width: 1024px) {
+  .waves-wrap { height: 88px; bottom: 3px; }
+  .wave--one { animation-duration: 9s; }
+  .wave--two { animation-duration: 14s; }
+  .wave--three { animation-duration: 20s; }
+}
+@media (max-width: 640px) {
+  .waves-wrap { height: 64px; bottom: 2px; }
+  .waves-wrap .wave { transform: translateX(-50%) translateY(-72%); width: 240%; height: 200%; }
+  .wave--one { animation-duration: 7.5s; }
+  .wave--two { animation-duration: 11s; }
+  .wave--three { animation-duration: 15.5s; }
+}
+@media (max-width: 480px) {
+  .waves-wrap { height: 56px; bottom: 1px; }
+  .boat-small { max-width: 180px; }
+}
+
+/* reduced-motion fallback */
+@media (prefers-reduced-motion: reduce) {
+  .waves-wrap .wave { animation: none !important; transition: none !important; }
+}
+
+
+/* ---------- Close button / controls ---------- */
+.surprise-controls {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 6px;
+  padding-bottom: 8px;
+  z-index: 30;
+}
+
+.surprise-close {
+  appearance: none;
+  -webkit-appearance: none;
+  border: none;
+  background: linear-gradient(180deg, rgba(255,255,255,0.95), rgba(255,255,255,0.8));
+  color: #4a2c3a;
+  padding: 10px 22px;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+  transition: transform 180ms ease, box-shadow 180ms ease;
+}
+.surprise-close:hover,
+.surprise-close:focus {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 26px rgba(0,0,0,0.18);
+  outline: none;
+}
+
+/* ---------- Responsive tweaks ---------- */
+@media (max-height: 720px) {
+  .rose-full { max-height: 78vh; }
+}
+@media (max-height: 640px) {
+  .rose-full { max-height: 72vh; }
+  .boat-small { max-width: 180px; }
+  .waves-wrap { height: 86px; }
+}
+@media (max-width: 520px) {
+  .surprise-inner { padding: 12px; border-radius: 12px; --boat-width: min(320px, 80%); }
+  .boat-small { max-width: 160px; }
+  .waves-wrap { height: 86px; }
+}
+
+
+
+
+/* force garlands above all other page layers */
+.garland {
+  position: fixed !important;   /* fixed to viewport */
+  z-index: 99999 !important;    /* higher than your modals (which use ~120) */
+  pointer-events: none;         /* so they don't block taps/clicks */
+  top: 0;                       /* keep existing top/left/right rules */
+  left: auto;
+  right: auto;
+}
