@@ -532,7 +532,7 @@ export default function Candle() {
 <p>
   You bring so much light and laughter into every moment, filling it with good vibes.
   <br />
-  Wishing you a birthday as cheerful as you are — full of joy, moments, wonderful surprises, and those everyday snaps bursting with energy.
+  Wishing you a birthday as cheerful as you are ~ full of joy, moments, wonderful surprises, and those everyday snaps bursting with energy.
   <br />
   Keep shining, keep smiling, and keep being you. 🌸
 </p>
