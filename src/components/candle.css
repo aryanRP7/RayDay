@@ -1093,7 +1093,6 @@ html, body {
   animation: glow 4s ease-in-out infinite alternate;
 }
 
-
 .birthday-message p {
   font-size: 1.1rem;
   max-width: 600px;
@@ -1116,7 +1115,7 @@ html, body {
 }
 
 /* warm glowing text animation (you already use this in RayDay) */
-/* @keyframes glow {
+@keyframes glow {
   from {
     text-shadow: 0 0 12px rgba(255, 180, 120, 0.6),
                  0 0 25px rgba(255, 120, 60, 0.4);
@@ -1125,7 +1124,7 @@ html, body {
     text-shadow: 0 0 30px rgba(255, 220, 160, 0.9),
                  0 0 60px rgba(255, 140, 70, 0.8);
   }
-} */
+}
 
 
 
@@ -2007,5 +2006,3 @@ touch-action: pan-x;             /* ensure horizontal pan only */
 @media (prefers-reduced-motion: reduce) {
   .rose-caption { animation: none; transform: translateX(-50%); }
 }
-
-
