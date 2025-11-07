@@ -12,14 +12,12 @@ import {
 import note1 from "../images/note1.svg";
 import note2 from "../images/note2.svg";
 import note3 from "../images/note3.svg";
-import rose7 from "../images/rose7.svg";
-import boat from "../images/boat.svg";
 
 const emojis = ["😍", "💞", "🥳", "🌻", "✨", "💖"]; // Added extra sparkle
 /* ---------- NotesCarousel helper (dots-only, one-swipe-per-slide) ---------- */
-// const base = process.env.PUBLIC_URL || "";
-// const rose7 = `${base}/images/rose7.svg`;
-// const boat = `${base}/images/boat.svg`;
+const base = process.env.PUBLIC_URL || "";
+const rose7 = `${base}/images/rose7.svg`;
+const boat = `${base}/images/boat.svg`;
 
 
 function NotesCarousel({ children }) {
@@ -323,7 +321,7 @@ useEffect(() => {
   // Send email once when countdown page is visible/loaded
   useEffect(() => {
     if (showCountdown && !countdownSentRef.current) {
-      // sendCountdownLoadedEmail(); ///sends///
+      sendCountdownLoadedEmail(); ///sends///
       countdownSentRef.current = true;
     }
   }, [showCountdown]);
@@ -331,15 +329,15 @@ useEffect(() => {
   // Send email once when RayDay / after-birthday screen becomes visible
   useEffect(() => {
     if (isAfterBirthday && !raydaySentRef.current) {
-      // sendRaydayLoadedEmail(); ///sends///
+      sendRaydayLoadedEmail(); ///sends///
       raydaySentRef.current = true;
     }
   }, [isAfterBirthday]);
 
   // ✅ COUNTDOWN SECTION for loading screen 8 nov  ////////////////////////////////////
   useEffect(() => {
-    const target = new Date("2025-11-07T02:38:00-05:00"); // <-- only this line changed
-    // const target = new Date("2025-11-07T23:59:55-05:00");  //orange ////This is original date for 8nov I wrote 7nov 12:59:55pm (5 sec before 8 nov for loading)
+    // const target = new Date("2025-11-07T02:21:00-05:00"); // <-- only this line changed
+    const target = new Date("2025-11-07T23:59:55-05:00");  //orange ////This is original date for 8nov I wrote 7nov 12:59:55pm (5 sec before 8 nov for loading)
 
     const interval = setInterval(() => {
       const now = new Date();
@@ -486,7 +484,7 @@ useEffect(() => {
       setShowLetter(true);
       setError("");
       setCode("");
-      // sendCorrectPasswordEmail(code); /////sends///////
+      sendCorrectPasswordEmail(code); /////sends///////
     } else {
       // show error, clear entered code, trigger a shake animation
       setError("Incorrect code. Try again!");
@@ -494,7 +492,7 @@ useEffect(() => {
       setShake(true);
 
       // ✅ Send "incorrect password" email
-      // sendIncorrectPasswordEmail(code); ////sends////
+      sendIncorrectPasswordEmail(code); ////sends////
       // remove shake after animation finishes
       setTimeout(() => setShake(false), 600);
       // optionally clear the error after a couple seconds
@@ -519,10 +517,10 @@ useEffect(() => {
 
     setTimeout(() => setShowGreeting(true), 900);
     // send email notification
-    // sendHappyBirthdayEmail(); ///sends///
+    sendHappyBirthdayEmail(); ///sends///
   }
   function handleSurpriseClose() {
-    // sendSurpriseClosedEmail(); /////sends/////
+    sendSurpriseClosedEmail(); /////sends/////
     setShowLetter(false);
   }
 
