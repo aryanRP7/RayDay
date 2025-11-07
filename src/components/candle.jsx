@@ -216,7 +216,7 @@ export default function Candle() {
   const countdownSentRef = useRef(false);
   const raydaySentRef = useRef(false);
 
-  ///ORIGINAL 9 nov
+  ///ORIGINAL 9 nov rayday screen          Timing for RayDay screen///////////////////////////
   useEffect(() => {
     // 🟢 Changed date: RayDay now starts Nov 9, 2025 at 1:00 AM NJ time (EST)
     // 🟢 Changed UTC offset: -05:00 (because daylight saving ends in November)
@@ -256,7 +256,7 @@ export default function Candle() {
   // Send email once when countdown page is visible/loaded
   useEffect(() => {
     if (showCountdown && !countdownSentRef.current) {
-      sendCountdownLoadedEmail(); ///sends///
+      // sendCountdownLoadedEmail(); ///sends///
       countdownSentRef.current = true;
     }
   }, [showCountdown]);
@@ -269,9 +269,9 @@ export default function Candle() {
     }
   }, [isAfterBirthday]);
 
-  // ✅ COUNTDOWN SECTION
+  // ✅ COUNTDOWN SECTION for loading screen 8 nov  ////////////////////////////////////
   useEffect(() => {
-    const target = new Date("2025-11-07T12:35:00-05:00"); // <-- only this line changed
+    const target = new Date("2025-11-07T00:45:00-05:00"); // <-- only this line changed
     // const target = new Date("2025-11-07T23:59:00-05:00");
 
     const interval = setInterval(() => {

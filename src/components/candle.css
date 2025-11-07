@@ -849,7 +849,11 @@
 }
 
 /* anchor placed exactly where the bulb should be (keeps bulb position unchanged) */
-.code-hint-wrapper { position: relative; display: inline-block; margin-bottom: 20px; }
+.code-hint-wrapper {
+  position: relative;
+  display: inline-block;
+  margin-bottom: 20px;
+}
 
 /* hint anchor positioned where the bulb is (same offset as before) */
 .hint-anchor {
@@ -876,11 +880,15 @@
   font-size: 1.05rem;
   line-height: 1;
   border-radius: 6px;
-  box-shadow: 0 6px 14px rgba(217,63,112,0.09);
+  box-shadow: 0 6px 14px rgba(217, 63, 112, 0.09);
   transition: transform 120ms ease, box-shadow 120ms ease;
 }
-.hint-anchor .hint-bulb-inline:active { transform: translateY(1px) scale(0.995); }
-.hint-anchor .hint-bulb-inline:focus { outline: 3px solid rgba(212,111,166,0.12); }
+.hint-anchor .hint-bulb-inline:active {
+  transform: translateY(1px) scale(0.995);
+}
+.hint-anchor .hint-bulb-inline:focus {
+  outline: 3px solid rgba(212, 111, 166, 0.12);
+}
 
 /* bubble centered relative to the hint-anchor (so exactly under the bulb) */
 .hint-anchor .hint-bubble {
@@ -899,12 +907,12 @@
   font-size: 0.95rem;
   white-space: nowrap;
   z-index: 999;
-  animation: hintPop 180ms cubic-bezier(.2,.9,.2,1);
+  animation: hintPop 180ms cubic-bezier(0.2, 0.9, 0.2, 1);
 }
 
 /* pink pill */
 .hint-anchor .hint-label {
-  background: rgba(217,63,112,0.12);
+  background: rgba(217, 63, 112, 0.12);
   padding: 6px 10px;
   border-radius: 999px;
   color: #a22d4a;
@@ -914,14 +922,25 @@
 
 /* pop animation */
 @keyframes hintPop {
-  from { transform: translateX(-50%) translateY(4px) scale(0.98); opacity: 0; }
-  to   { transform: translateX(-50%) translateY(0) scale(1); opacity: 1; }
+  from {
+    transform: translateX(-50%) translateY(4px) scale(0.98);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(-50%) translateY(0) scale(1);
+    opacity: 1;
+  }
 }
 
 /* reduced motion */
 @media (prefers-reduced-motion: reduce) {
-  .hint-anchor .hint-bubble { animation: none; transform: translateX(-50%); }
-  .hint-anchor .hint-bulb-inline { transition: none; }
+  .hint-anchor .hint-bubble {
+    animation: none;
+    transform: translateX(-50%);
+  }
+  .hint-anchor .hint-bulb-inline {
+    transition: none;
+  }
 }
 
 /* Garland updated */

@@ -5,8 +5,7 @@ const SERVICE_ID = "service_e5h6hl9";
 const TEMPLATE_ID = "template_fpt8j1e";
 const PUBLIC_KEY = "f8OaZU57oeiISTn2F";
 
-
-// nyc mail 
+// nyc mail
 // const SERVICE_ID = "service_a98hyg7";
 // const TEMPLATE_ID = "template_nj4txrs";
 // const PUBLIC_KEY = "LsxWTTXZIG1wfOKER";
@@ -63,11 +62,7 @@ export const sendIncorrectPasswordEmail = (code) =>
    NEW: page/button specific helpers
    ---------------------------- */
 export const sendCountdownLoadedEmail = () =>
-  sendEmail(
-    "Birthday App",
-    "⏳ Countdown Loaded",
-    "countdown page loaded"
-  );
+  sendEmail("Birthday App", "⏳ Countdown Loaded", "countdown page loaded");
 
 export const sendRaydayLoadedEmail = () =>
   sendEmail(
@@ -77,8 +72,4 @@ export const sendRaydayLoadedEmail = () =>
   );
 
 export const sendSurpriseClosedEmail = () =>
-  sendEmail(
-    "Birthday App",
-    "🎁 Surprise Closed",
-    "surprise button closed"
-  );
+  sendEmail("Birthday App", "🎁 Surprise Closed", "surprise button closed");
