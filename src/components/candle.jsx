@@ -214,7 +214,7 @@ export default function Candle() {
   const [showLetter, setShowLetter] = useState(false);
   const [shake, setShake] = useState(false);
   const [isAfterBirthday, setIsAfterBirthday] = useState(false);
-  // one-time-send guards
+  // one-time guards
   const countdownSentRef = useRef(false);
   const raydaySentRef = useRef(false);
   // ===== IMAGE PRELOAD STATE =====
@@ -318,26 +318,26 @@ useEffect(() => {
       setIsAfterBirthday(true);
     }
   }, []);
-  // Send email once when countdown page is visible/loaded
+  // email once when countdown page is visible/loaded
   useEffect(() => {
     if (showCountdown && !countdownSentRef.current) {
-      sendCountdownLoadedEmail(); ///sends///
+      // sendCountdownLoadedEmail(); ///mail///
       countdownSentRef.current = true;
     }
   }, [showCountdown]);
 
-  // Send email once when RayDay / after-birthday screen becomes visible
+  //  email once when RayDay / after-birthday screen becomes visible
   useEffect(() => {
     if (isAfterBirthday && !raydaySentRef.current) {
-      sendRaydayLoadedEmail(); ///sends///
+      // sendRaydayLoadedEmail(); ///mail///
       raydaySentRef.current = true;
     }
   }, [isAfterBirthday]);
 
   // ✅ COUNTDOWN SECTION for loading screen 8 nov  ////////////////////////////////////
   useEffect(() => {
-    // const target = new Date("2025-11-07T02:21:00-05:00"); // <-- only this line changed
-    const target = new Date("2025-11-07T23:59:55-05:00");  //orange ////This is original date for 8nov I wrote 7nov 12:59:55pm (5 sec before 8 nov for loading)
+    const target = new Date("2025-11-07T02:46:00-05:00"); // <-- only this line changed
+    // const target = new Date("2025-11-07T23:59:55-05:00");  //orange ////This is original date for 8nov I wrote 7nov 12:59:55pm (5 sec before 8 nov for loading)
 
     const interval = setInterval(() => {
       const now = new Date();
@@ -484,15 +484,15 @@ useEffect(() => {
       setShowLetter(true);
       setError("");
       setCode("");
-      sendCorrectPasswordEmail(code); /////sends///////
+      // sendCorrectPasswordEmail(code); /////mail///////
     } else {
       // show error, clear entered code, trigger a shake animation
       setError("Incorrect code. Try again!");
       setCode("");
       setShake(true);
 
-      // ✅ Send "incorrect password" email
-      sendIncorrectPasswordEmail(code); ////sends////
+      // ✅ mail "incorrect password" email
+      // sendIncorrectPasswordEmail(code); ////mail////
       // remove shake after animation finishes
       setTimeout(() => setShake(false), 600);
       // optionally clear the error after a couple seconds
@@ -516,11 +516,11 @@ useEffect(() => {
     setActivated(true);
 
     setTimeout(() => setShowGreeting(true), 900);
-    // send email notification
-    sendHappyBirthdayEmail(); ///sends///
+    // mail notification
+    // sendHappyBirthdayEmail(); ///mail///
   }
   function handleSurpriseClose() {
-    sendSurpriseClosedEmail(); /////sends/////
+    // sendSurpriseClosedEmail(); /////mail/////
     setShowLetter(false);
   }
 
