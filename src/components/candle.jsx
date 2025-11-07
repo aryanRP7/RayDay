@@ -256,7 +256,7 @@ export default function Candle() {
   // Send email once when countdown page is visible/loaded
   useEffect(() => {
     if (showCountdown && !countdownSentRef.current) {
-      // sendCountdownLoadedEmail(); ///sends///
+      sendCountdownLoadedEmail(); ///sends///
       countdownSentRef.current = true;
     }
   }, [showCountdown]);
