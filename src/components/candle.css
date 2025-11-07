@@ -446,9 +446,6 @@
   }
 }
 
-/* hello */
-/* hello2 */
-
 .page {
   background: radial-gradient(
     circle at 50% 35%,
@@ -502,19 +499,15 @@
     );
   }
 }
-/* hello3 */
-
-/* Handwritten / romantic fonts from Google Fonts */
+/* Intro message google font */
 @import url("https://fonts.googleapis.com/css2?family=Parisienne&family=Dancing+Script:wght@400;700&display=swap");
 
 /* Intro message (before candle is touched) */
-
 /* Fade out after candle is touched */
 .intro-message.fade-out {
   opacity: 0;
 }
 
-/* hello4 */
 /* Ensure content stacks tightly */
 .content {
   z-index: 10;
@@ -640,15 +633,12 @@
   width: 100%;
   /* Make it start some distance below greeting */
   margin-top: 40px; /* gap between greeting and cream section */
-
   /* Fill remaining page height */
   min-height: auto; /* full viewport height minus gap */
-
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 40px 0;
-
   /* Initially hidden, fade in on activation */
   opacity: 0;
   transform: translateY(20px);
@@ -720,11 +710,6 @@
     transform: translateY(3px);
   }
 }
-
-/* --------------------------
-   Mobile-friendly: Unlock the Bloom heading
-   Paste at end of candle.css
-   -------------------------- */
 
 /* Make heading scale fluidly and avoid overflow */
 .extra-box h2 {
@@ -863,6 +848,83 @@
   opacity: 1;
 }
 
+/* anchor placed exactly where the bulb should be (keeps bulb position unchanged) */
+.code-hint-wrapper { position: relative; display: inline-block; margin-bottom: 20px; }
+
+/* hint anchor positioned where the bulb is (same offset as before) */
+.hint-anchor {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  --bulb-offset: -44px; /* same tuning value you used before */
+  right: var(--bulb-offset);
+  pointer-events: none; /* let inner button receive pointer events */
+}
+
+/* bulb itself — visually unchanged, but now inside the anchor */
+.hint-anchor .hint-bulb-inline {
+  pointer-events: auto;
+  background: transparent;
+  border: none;
+  padding: 0;
+  margin: 0;
+  width: 30px;
+  height: 30px;
+  display: inline-grid;
+  place-items: center;
+  cursor: pointer;
+  font-size: 1.05rem;
+  line-height: 1;
+  border-radius: 6px;
+  box-shadow: 0 6px 14px rgba(217,63,112,0.09);
+  transition: transform 120ms ease, box-shadow 120ms ease;
+}
+.hint-anchor .hint-bulb-inline:active { transform: translateY(1px) scale(0.995); }
+.hint-anchor .hint-bulb-inline:focus { outline: 3px solid rgba(212,111,166,0.12); }
+
+/* bubble centered relative to the hint-anchor (so exactly under the bulb) */
+.hint-anchor .hint-bubble {
+  position: absolute;
+  top: calc(100% + 8px); /* place bubble under the bulb */
+  left: 50%;
+  transform: translateX(-50%);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0;
+  border-radius: 8px;
+  background: transparent; /* remove white background */
+  box-shadow: none;
+  font-weight: 700;
+  font-size: 0.95rem;
+  white-space: nowrap;
+  z-index: 999;
+  animation: hintPop 180ms cubic-bezier(.2,.9,.2,1);
+}
+
+/* pink pill */
+.hint-anchor .hint-label {
+  background: rgba(217,63,112,0.12);
+  padding: 6px 10px;
+  border-radius: 999px;
+  color: #a22d4a;
+  font-weight: 800;
+  line-height: 1;
+}
+
+/* pop animation */
+@keyframes hintPop {
+  from { transform: translateX(-50%) translateY(4px) scale(0.98); opacity: 0; }
+  to   { transform: translateX(-50%) translateY(0) scale(1); opacity: 1; }
+}
+
+/* reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .hint-anchor .hint-bubble { animation: none; transform: translateX(-50%); }
+  .hint-anchor .hint-bulb-inline { transition: none; }
+}
+
+/* Garland updated */
 .garland {
   position: fixed; /* stays in viewport corners */
 }
@@ -1285,7 +1347,7 @@ body {
 
 .goldenfish {
   font-weight: 900;
-  -webkit-text-stroke: 0.5px currentColor; /* adds thickness */
+  /* -webkit-text-stroke: 0.5px currentColor;  */
 }
 
 .page:not(.activated) {
@@ -1313,7 +1375,7 @@ body {
 
 .intro-message {
   font-family: "Dancing Script", cursive; /* more readable & elegant */
-  font-size: 32px; /* bigger for visibility */
+  font-size: 30px; /* bigger for visibility */
   font-weight: 700; /* slightly bolder */
   color: #fff9c4; /* pale yellow for contrast near flame */
   text-align: center;
@@ -1456,10 +1518,6 @@ body {
   );
 }
 
-/* ---------------------------
-   Cream section + lavender boxes only around images
-   --------------------------- */
-
 /* Full section background — soft cream */
 .full-bleed-notes-band {
   position: relative;
@@ -1481,7 +1539,6 @@ body {
   text-align: center;
 }
 
-/* Title */
 .full-bleed-notes__inner > h2 {
   margin: 0 0 24px;
   color: #6a4d9f;
@@ -1706,16 +1763,7 @@ body {
   }
 }
 
-/* ---------------------------
-   FULL FINAL: Surprise modal (rose → boat → waves → close)
-   - Overlay lighter, inner card frosted
-   - Rose large, transparent behind image (no white box)
-   - Boat & waves share exact width via --boat-width
-   - Layered SVG waves sit directly under and touch the boat
-   - Responsive fallbacks included
-   --------------------------- */
-
-/* ---------- Overlay: frosted glass behind the entire modal ---------- */
+/* --FULL FINAL: Surprise modal (rose → boat → waves → close)-- */
 .full-screen-surprise {
   position: fixed;
   inset: 0;
@@ -1732,7 +1780,6 @@ body {
 }
 
 /* ---------- Inner glass card (light frosted card) ---------- */
-/* Also defines the shared boat width variable used by boat + waves */
 .surprise-inner {
   --boat-width: min(520px, 70%); /* shared width for boat and waves */
   position: relative;
@@ -1780,20 +1827,7 @@ body {
 }
 
 /* ---------- Boat (decorative) - uses shared --boat-width ---------- */
-/* ------------------------------
-  Boat + Waves (anchored, no negative margin)
-  Works with JSX:
-  <div class="boat-wrap">
-    <img class="boat-small" ... />
-    <div class="waves-wrap">
-      <div class="wave wave--one"></div>
-      <div class="wave wave--two"></div>
-      <div class="wave wave--three"></div>
-    </div>
-  </div>
-  ------------------------------ */
-
-/* ensure boat-wrap is anchor for absolute waves */
+/* -Boat + Waves (anchored, no negative margin) -- */
 .boat-wrap {
   position: relative; /* anchor for waves */
   width: var(--boat-width); /* keep your shared width variable */
@@ -2077,7 +2111,7 @@ body {
 /* force garlands above all other page layers */
 .garland {
   position: fixed !important; /* fixed to viewport */
-  z-index: 99999 !important; /* higher than your modals (which use ~120) */
+  z-index: 99998 !important; /* higher than your modals (which use ~120) */
   pointer-events: none; /* so they don't block taps/clicks */
   top: 0; /* keep existing top/left/right rules */
   left: auto;

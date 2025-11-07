@@ -12,18 +12,9 @@ import {
 import note1 from "../images/note1.svg";
 import note2 from "../images/note2.svg";
 import note3 from "../images/note3.svg";
-// import rose7 from "../images/rose7.svg";
-// import boat from "../images/boat.svg";
-
 const emojis = ["😍", "💞", "🥳", "🌻", "✨", "💖"]; // Added extra sparkle
 /* ---------- NotesCarousel helper (dots-only, one-swipe-per-slide) ---------- */
-/* ---------- NotesCarousel helper (dots-only, one-swipe-per-slide robust) ---------- */
-/* ---------- NotesCarousel helper (robust: exactly one slide per swipe) ---------- */
-// Candle.jsx (top of file)
 const base = process.env.PUBLIC_URL || "";
-// const note1 = `${base}/images/note1.svg`;
-// const note2 = `${base}/images/note2.svg`;
-// const note3 = `${base}/images/note3.svg`;
 const rose7 = `${base}/images/rose7.svg`;
 const boat = `${base}/images/boat.svg`;
 
@@ -35,7 +26,6 @@ function NotesCarousel({ children }) {
   const pointerIdRef = useRef(null);
   const [index, setIndex] = useState(0);
   const slides = React.Children.toArray(children);
-
   const getNearestIndex = (el) => {
     const cards = Array.from(el.children);
     const center = el.scrollLeft + el.clientWidth / 2;
@@ -93,7 +83,6 @@ function NotesCarousel({ children }) {
     };
 
     // pointer / touch end
-    // replace your onPointerUp and onCancel with this version
     const onPointerUp = (ev) => {
       const pageX =
         ev.pageX ??
@@ -113,7 +102,6 @@ function NotesCarousel({ children }) {
       // start index at start of gesture (guarantees only single-step)
       const startIndex = startIndexRef.current;
       let delta = 0;
-
       if (Math.abs(dx) >= distanceThreshold || velocity > velocityThreshold) {
         delta = dx < 0 ? 1 : -1;
       } else {
@@ -125,7 +113,6 @@ function NotesCarousel({ children }) {
         Math.min(slides.length - 1, startIndex + delta)
       );
 
-      // *** STOP any momentum immediately by forcing current scroll position ***
       // assignment cancels deceleration on most browsers
       const current = el.scrollLeft;
       el.scrollLeft = current;
@@ -211,20 +198,16 @@ function NotesCarousel({ children }) {
 }
 /* ---------- End NotesCarousel helper ---------- */
 
-/* ---------- End NotesCarousel helper ---------- */
-
-/* ---------- End NotesCarousel helper ---------- */
-
 export default function Candle() {
   const [activated, setActivated] = useState(false);
   const [showGreeting, setShowGreeting] = useState(false);
   const [particles, setParticles] = useState([]);
   const [showCountdown, setShowCountdown] = useState(true);
   const [timeLeft, setTimeLeft] = useState("00:00:00");
-
   const particleId = useRef(0);
   const greetingRef = useRef(null);
   const [code, setCode] = useState("");
+  const [showHint, setShowHint] = useState(false);
   const [error, setError] = useState("");
   const [showLetter, setShowLetter] = useState(false);
   const [shake, setShake] = useState(false);
@@ -233,15 +216,13 @@ export default function Candle() {
   const countdownSentRef = useRef(false);
   const raydaySentRef = useRef(false);
 
-  //////////////////////////////ORIGINAL 9 nov
+  ///ORIGINAL 9 nov
   useEffect(() => {
     // 🟢 Changed date: RayDay now starts Nov 9, 2025 at 1:00 AM NJ time (EST)
     // 🟢 Changed UTC offset: -05:00 (because daylight saving ends in November)
     const targetTime = new Date("2025-11-09T13:00:00-05:00");
-
     // (same as before)
     const now = new Date();
-
     const formatter = new Intl.DateTimeFormat("en-US", {
       timeZone: "America/New_York",
       year: "numeric",
@@ -275,7 +256,7 @@ export default function Candle() {
   // Send email once when countdown page is visible/loaded
   useEffect(() => {
     if (showCountdown && !countdownSentRef.current) {
-      // sendCountdownLoadedEmail();               /////////////////////////////////////////
+      sendCountdownLoadedEmail(); ///sends///
       countdownSentRef.current = true;
     }
   }, [showCountdown]);
@@ -283,14 +264,14 @@ export default function Candle() {
   // Send email once when RayDay / after-birthday screen becomes visible
   useEffect(() => {
     if (isAfterBirthday && !raydaySentRef.current) {
-      // sendRaydayLoadedEmail();     //////////////////////////////////////////////////
+      sendRaydayLoadedEmail(); ///sends///
       raydaySentRef.current = true;
     }
   }, [isAfterBirthday]);
 
   // ✅ COUNTDOWN SECTION
   useEffect(() => {
-    const target = new Date("2025-11-06T09:01:00-05:00"); // <-- only this line changed
+    const target = new Date("2025-11-07T12:35:00-05:00"); // <-- only this line changed
     // const target = new Date("2025-11-07T23:59:00-05:00");
 
     const interval = setInterval(() => {
@@ -307,7 +288,6 @@ export default function Candle() {
       const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
       const minutes = Math.floor((diff / (1000 * 60)) % 60);
       const seconds = Math.floor((diff / 1000) % 60);
-
       // 🟢 Hide days if 0
       const dayPart = days > 0 ? `${days}d ` : "";
 
@@ -325,23 +305,22 @@ export default function Candle() {
   const [balloonsData] = useState(() =>
     Array.from({ length: 22 }, () => {
       const colors = [
-        ["#f85676ff", "#ff99b3"], // rose pink
-        ["#ffd700", "#ffec8b"], // golden yellow
-        ["#6a0dad", "#d9b3ff"], // royal purple
-        ["#00bfff", "#99e6ff"], // sky blue
-        ["#ff7f50", "#ffb399"], // coral orange
-        ["#7fffd4", "#b2fff0"], // aquamarine
-        ["#ff69b4", "#ffb6c1"], // hot pink
-        ["#98fb98", "#c1ffc1"], // mint green
-        ["#ffa07a", "#ffd1b3"], // light salmon
-        ["#ba55d3", "#dda0dd"], // orchid purple
-        ["#f08080", "#ffb6b6"], // soft red
-        ["#40e0d0", "#a0ffff"], // turquoise
-        ["#ffb347", "#ffd580"], // sunset orange
+        ["#f85676ff", "#ff99b3"],
+        ["#ffd700", "#ffec8b"],
+        ["#6a0dad", "#d9b3ff"],
+        ["#00bfff", "#99e6ff"],
+        ["#ff7f50", "#ffb399"],
+        ["#7fffd4", "#b2fff0"],
+        ["#ff69b4", "#ffb6c1"],
+        ["#98fb98", "#c1ffc1"],
+        ["#ffa07a", "#ffd1b3"],
+        ["#ba55d3", "#dda0dd"],
+        ["#f08080", "#ffb6b6"],
+        ["#40e0d0", "#a0ffff"],
+        ["#ffb347", "#ffd580"],
       ];
 
       const [c1, c2] = colors[Math.floor(Math.random() * colors.length)];
-
       // Randomly assign type: "circle" (default), "heart", or "star"
       const rand = Math.random();
       let type = "circle";
@@ -355,7 +334,7 @@ export default function Candle() {
         rotate: Math.random() * 30 - 15 + "deg",
         color1: c1,
         color2: c2,
-        type, // 👈 NEW
+        type,
       };
     })
   );
@@ -365,7 +344,6 @@ export default function Candle() {
     if (!activated || !greetingRef.current) return;
 
     const greetingWidth = greetingRef.current.offsetWidth;
-
     const interval = setInterval(() => {
       setParticles((prev) => {
         const next = [...prev];
@@ -399,11 +377,10 @@ export default function Candle() {
 
   const handleCodeSubmit = () => {
     if (code === "0811") {
-      setShowLetter(true); // Show the letter modal
+      setShowLetter(true);
       setError("");
-      setCode(""); // optionally clear after success too
-      // ✅ Send "correct password" email
-      // sendCorrectPasswordEmail(code); ///////////////////////////////////////////////////////////////
+      setCode("");
+      sendCorrectPasswordEmail(code); /////sends///////
     } else {
       // show error, clear entered code, trigger a shake animation
       setError("Incorrect code. Try again!");
@@ -411,15 +388,18 @@ export default function Candle() {
       setShake(true);
 
       // ✅ Send "incorrect password" email
-      // sendIncorrectPasswordEmail(code); ////////////////////////////////////////////////////////////
-
+      sendIncorrectPasswordEmail(code); ////sends////
       // remove shake after animation finishes
       setTimeout(() => setShake(false), 600);
-
       // optionally clear the error after a couple seconds
       setTimeout(() => setError(""), 1800);
     }
   };
+  function showTransientHint() {
+    // show for 1 second
+    setShowHint(true);
+    setTimeout(() => setShowHint(false), 1000);
+  }
 
   useEffect(() => {
     if (!particles.length) return;
@@ -433,7 +413,11 @@ export default function Candle() {
 
     setTimeout(() => setShowGreeting(true), 900);
     // send email notification
-    // sendHappyBirthdayEmail(); ////////////////////////////////////////////////////////////////////
+    sendHappyBirthdayEmail(); ///sends///
+  }
+  function handleSurpriseClose() {
+    sendSurpriseClosedEmail(); /////sends/////
+    setShowLetter(false);
   }
 
   function removeParticle(id) {
@@ -619,18 +603,44 @@ export default function Candle() {
         <div className="extra-box">
           <h2>✨ Unlock the Bloom 🎁</h2>
 
-          {/* Code display */}
-          <div className={`code-display ${shake ? "shake" : ""}`}>
-            {code.split("").map((digit, i) => (
-              <span key={i} className="digit">
-                {digit}
-              </span>
-            ))}
-            {Array.from({ length: 4 - code.length }).map((_, i) => (
-              <span key={i + code.length} className="digit placeholder">
-                •
-              </span>
-            ))}
+          {/* Code display (wrapped) + bulb placed flush to right of 4th dash */}
+          <div className="code-hint-wrapper">
+            <div
+              className={`code-display ${shake ? "shake" : ""}`}
+              aria-label="4 digit code"
+            >
+              {code.split("").map((digit, i) => (
+                <span key={i} className="digit">
+                  {digit}
+                </span>
+              ))}
+              {Array.from({ length: 4 - code.length }).map((_, i) => (
+                <span key={i + code.length} className="digit placeholder">
+                  •
+                </span>
+              ))}
+            </div>
+            {/* bulb container — positions bulb absolutely and bubble relative to bulb */}
+            <div
+              className="hint-anchor"
+              aria-hidden={showHint ? "false" : "true"}
+            >
+              <button
+                type="button"
+                className="hint-bulb-inline"
+                aria-label="Show hint"
+                title="Show hint"
+                onClick={showTransientHint}
+              >
+                💡
+              </button>
+
+              {showHint && (
+                <div className="hint-bubble" role="status" aria-live="polite">
+                  <span className="hint-label">nothing 乁( •_• )ㄏ</span>
+                </div>
+              )}
+            </div>
           </div>
 
           {/* Locker-style keypad */}
@@ -673,7 +683,6 @@ export default function Candle() {
         </div>
 
         {/* Letter Modal */}
-        {/* Letter Modal */}
         {showLetter && (
           <div
             className="full-screen-surprise"
@@ -711,7 +720,7 @@ export default function Candle() {
               <div className="surprise-controls">
                 <button
                   className="surprise-close"
-                  onClick={() => setShowLetter(false)}
+                  onClick={handleSurpriseClose} // ✅ this one calls both email + close
                   aria-label="Close surprise"
                 >
                   Close
