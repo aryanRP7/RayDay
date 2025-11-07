@@ -25,13 +25,22 @@ yarn-error.log*
 
 # //You have to remeove these 2 files from GIT
 # and enable send email all of them
-# src/components/candle.jsx
-# src/components/email.js
+src/components/candle.jsx
+src/components/email.js
 
-# git rm --cached src/components/candle.jsx
-# git rm --cached src/components/email.js
+# git rm --cached src/components/candle.jsx src/components/email.js
 # git add .gitignore
 # git commit -m "Ignore candle.jsx and email.js components"
 # git push
 
+# # Option A1 — preferred: remove them from .gitignore and track normally
+# # (edit .gitignore to remove the two lines)
+# git add src/components/candle.jsx src/components/email.js
+# git commit -m "Track candle.jsx and email.js (updates for deploy)"
+# git push
+
+# # Option A2 — if you want to keep them in .gitignore but push this change once:
+# git add -f src/components/candle.jsx src/components/email.js
+# git commit -m "Temporarily force-add private components for release"
+# git push
 
