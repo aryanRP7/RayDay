@@ -215,6 +215,61 @@ export default function Candle() {
   // one-time-send guards
   const countdownSentRef = useRef(false);
   const raydaySentRef = useRef(false);
+// ===== IMAGE PRELOAD STATE =====
+  const [imagesLoading, setImagesLoading] = useState(true);
+  const [imagesLoadedCount, setImagesLoadedCount] = useState(0);
+  // list of images to preload: notes + rose (you can add boat if you want)
+  const imagesToPreload = [note1, note2, note3, rose7];
+
+  // Preload images on mount
+  // Preload important images on mount (notes + rose)
+useEffect(() => {
+  let mounted = true;
+  let loaded = 0;
+
+  function markOneLoaded() {
+    loaded += 1;
+    if (!mounted) return;
+    setImagesLoadedCount(loaded);
+    if (loaded >= imagesToPreload.length) {
+      // small UX delay so loader doesn't blink
+      setTimeout(() => {
+        if (mounted) setImagesLoading(false);
+      }, 220);
+    }
+  }
+
+  imagesToPreload.forEach((src) => {
+    try {
+      const img = new Image();
+      img.src = src;
+      img.onload = () => markOneLoaded();
+      img.onerror = () => {
+        // still count errors so loader won't hang forever
+        console.warn("Image failed to load:", src);
+        markOneLoaded();
+      };
+    } catch (e) {
+      console.warn("Preload error", e);
+      markOneLoaded();
+    }
+  });
+
+  // safety timeout so loader doesn't hang forever
+  const safety = setTimeout(() => {
+    if (!mounted) return;
+    if (loaded < imagesToPreload.length) {
+      setImagesLoadedCount(imagesToPreload.length);
+      setImagesLoading(false);
+    }
+  }, 8000);
+
+  return () => {
+    mounted = false;
+    clearTimeout(safety);
+  };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+}, []); // run once
 
   ///ORIGINAL 9 nov rayday screen          Timing for RayDay screen///////////////////////////
   useEffect(() => {
@@ -256,7 +311,7 @@ export default function Candle() {
   // Send email once when countdown page is visible/loaded
   useEffect(() => {
     if (showCountdown && !countdownSentRef.current) {
-      sendCountdownLoadedEmail(); ///sends///
+      // sendCountdownLoadedEmail(); ///sends///
       countdownSentRef.current = true;
     }
   }, [showCountdown]);
@@ -271,8 +326,8 @@ export default function Candle() {
 
   // ✅ COUNTDOWN SECTION for loading screen 8 nov  ////////////////////////////////////
   useEffect(() => {
-    // const target = new Date("2025-11-07T00:45:00-05:00"); // <-- only this line changed
-    const target = new Date("2025-11-07T23:59:57-05:00");  ////This is original date for 8nov I wrote 7nov 12:59:57pm (3 sec before 8 nov for loading)
+    const target = new Date("2025-11-07T00:45:00-05:00"); // <-- only this line changed
+    // const target = new Date("2025-11-07T23:59:57-05:00");  ////This is original date for 8nov I wrote 7nov 12:59:57pm (3 sec before 8 nov for loading)
 
     const interval = setInterval(() => {
       const now = new Date();
@@ -338,6 +393,44 @@ export default function Candle() {
       };
     })
   );
+  // Segmented SoftLoader (replaces previous simple circle)
+// Segmented SoftLoader — 10 segments, auto-hide 10s
+function SoftLoader({ className = "" }) {
+  const [visible, setVisible] = useState(true);
+
+  useEffect(() => {
+    const t = setTimeout(() => setVisible(false), 10000); // 10s auto-hide
+    return () => clearTimeout(t);
+  }, []);
+
+  if (!visible) return null;
+
+  const isRose = (className || "").includes("rose");
+  const count = 10;
+  const segments = Array.from({ length: count }).map((_, i) => (
+    <span
+      key={i}
+      className="soft-seg"
+      style={{
+        ["--angle"]: `${(360 / count) * i}deg`,
+        ["--i"]: `${i}`,
+      }}
+      aria-hidden="true"
+    />
+  ));
+
+  return (
+    <span
+      className={`soft-loader ${className} ${isRose ? "rose-loader" : "inline-loader"}`}
+      role="status"
+      aria-live="polite"
+      aria-label="Loading"
+    >
+      {segments}
+    </span>
+  );
+}
+
 
   // Particles inside greeting
   useEffect(() => {
@@ -380,7 +473,7 @@ export default function Candle() {
       setShowLetter(true);
       setError("");
       setCode("");
-      sendCorrectPasswordEmail(code); /////sends///////
+      // sendCorrectPasswordEmail(code); /////sends///////
     } else {
       // show error, clear entered code, trigger a shake animation
       setError("Incorrect code. Try again!");
@@ -388,7 +481,7 @@ export default function Candle() {
       setShake(true);
 
       // ✅ Send "incorrect password" email
-      sendIncorrectPasswordEmail(code); ////sends////
+      // sendIncorrectPasswordEmail(code); ////sends////
       // remove shake after animation finishes
       setTimeout(() => setShake(false), 600);
       // optionally clear the error after a couple seconds
@@ -413,10 +506,10 @@ export default function Candle() {
 
     setTimeout(() => setShowGreeting(true), 900);
     // send email notification
-    sendHappyBirthdayEmail(); ///sends///
+    // sendHappyBirthdayEmail(); ///sends///
   }
   function handleSurpriseClose() {
-    sendSurpriseClosedEmail(); /////sends/////
+    // sendSurpriseClosedEmail(); /////sends/////
     setShowLetter(false);
   }
 
@@ -445,6 +538,19 @@ export default function Candle() {
       </div>
     );
   }
+  // show full-screen loader until important images are ready
+if (imagesLoading) {
+  return (
+    <div className="initial-loader" role="status" aria-live="polite">
+      {/* uses SoftLoader already in your component */}
+      <SoftLoader className="initial-soft-loader" />
+      <div className="initial-loader__label" aria-hidden="true">
+        Loading… ({imagesLoadedCount}/{imagesToPreload.length})
+      </div>
+    </div>
+  );
+}
+
 
   if (showCountdown) {
     return (
@@ -587,17 +693,32 @@ export default function Candle() {
       </div>
 
       {activated && (
-        <div className="full-bleed-notes-band">
-          <div className="full-bleed-notes__inner">
-            <h2>🎨 Pieces, Traces & a Palette ✨</h2>
-            <NotesCarousel>
-              <img src={note1} alt="Note 1" />
-              <img src={note2} alt="Note 2" />
-              <img src={note3} alt="Note 3" />
-            </NotesCarousel>
+  <div className="full-bleed-notes-band">
+    <div className="full-bleed-notes__inner">
+      <h2>
+        🎨 Pieces, Traces & a Palette ✨ <SoftLoader className="inline-loader" />
+      </h2>
+
+      {imagesLoading ? (
+        // local band loader — doesn't block the whole page
+        <div className="band-loader" role="status" aria-live="polite">
+          <SoftLoader className="band-soft-loader" />
+          <div className="band-loader__label" aria-hidden="true">
+            Loading pieces… ({imagesLoadedCount}/{imagesToPreload.length})
           </div>
         </div>
+      ) : (
+        // original carousel (notes) shown after preload completes
+        <NotesCarousel>
+          <img src={note1} alt="Note 1" />
+          <img src={note2} alt="Note 2" />
+          <img src={note3} alt="Note 3" />
+        </NotesCarousel>
       )}
+    </div>
+  </div>
+)}
+
 
       <div className="second-section">
         <div className="extra-box">
@@ -697,14 +818,27 @@ export default function Candle() {
               role="document"
             >
               {/* Full-screen rose image (covering available viewport area) */}
-              <div className="rose-wrap" aria-hidden="false">
-                <div className="rose-caption" role="heading" aria-level="3">
-                  <span className="rose-caption__line">You deserve</span>
-                  <span className="rose-caption__highlight">everything</span>
-                </div>
+              <div className="rose-wrap" aria-hidden={imagesLoading ? "true" : "false"}>
+  {/* caption stays visible (pointer-events: none in CSS) */}
+  <div className="rose-caption" role="heading" aria-level="3">
+    <span className="rose-caption__line">You deserve</span>
+    <span className="rose-caption__highlight">everything</span>
+  </div>
 
-                <img src={rose7} alt="Special rose" className="rose-full" />
-              </div>
+  {imagesLoading ? (
+    // loader centered in the rose area; once imagesLoading is false the actual rose img shows
+    <div className="rose-loader-overlay" role="status" aria-live="polite">
+      <SoftLoader className="rose-soft-loader" />
+      <div className="rose-loader__label" aria-hidden="true">
+        Preparing surprise…
+      </div>
+    </div>
+  ) : (
+    // show rose image after preload finishes
+    <img src={rose7} alt="Special rose" className="rose-full" />
+  )}
+</div>
+    
 
               {/* Small boat below the rose */}
               <div className="boat-wrap">
