@@ -223,59 +223,66 @@ export default function Candle() {
 
   // Preload images on mount
   // Preload important images on mount (notes + rose)
-  useEffect(() => {
-    let mounted = true;
-    let loaded = 0;
+  // Preload important images, but only AFTER the countdown finishes.
+// This prevents the initial loader from appearing / images from being fetched
+// while the countdown screen is still visible.
+useEffect(() => {
+  // don't start until countdown finished
+  if (showCountdown) return;
 
-    function markOneLoaded() {
-      loaded += 1;
-      if (!mounted) return;
-      setImagesLoadedCount(loaded);
-      if (loaded >= imagesToPreload.length) {
-        // small UX delay so loader doesn't blink
-        setTimeout(() => {
-          if (mounted) setImagesLoading(false);
-        }, 220);
-      }
+  let mounted = true;
+  let loaded = 0;
+
+  function markOneLoaded() {
+    loaded += 1;
+    if (!mounted) return;
+    setImagesLoadedCount(loaded);
+    if (loaded >= imagesToPreload.length) {
+      // tiny delay so loader doesn't blink
+      setTimeout(() => {
+        if (mounted) setImagesLoading(false);
+      }, 220);
     }
+  }
 
-    imagesToPreload.forEach((src) => {
-      try {
-        const img = new Image();
-        img.src = src;
-        img.onload = () => markOneLoaded();
-        img.onerror = () => {
-          // still count errors so loader won't hang forever
-          console.warn("Image failed to load:", src);
-          markOneLoaded();
-        };
-      } catch (e) {
-        console.warn("Preload error", e);
-        markOneLoaded();
-      }
-    });
+  imagesToPreload.forEach((src) => {
+    try {
+      const img = new Image();
+      img.src = src;
+      img.onload = () => markOneLoaded();
+      img.onerror = () => {
+        console.warn("Image failed to load:", src);
+        markOneLoaded(); // still count errors
+      };
+    } catch (e) {
+      console.warn("Preload error", e);
+      markOneLoaded();
+    }
+  });
 
-    // safety timeout so loader doesn't hang forever
-    const safety = setTimeout(() => {
-      if (!mounted) return;
-      if (loaded < imagesToPreload.length) {
-        setImagesLoadedCount(imagesToPreload.length);
-        setImagesLoading(false);
-      }
-    }, 8000);
+  // safety timeout so loader doesn't hang forever
+  const safety = setTimeout(() => {
+    if (!mounted) return;
+    if (loaded < imagesToPreload.length) {
+      setImagesLoadedCount(imagesToPreload.length);
+      setImagesLoading(false);
+    }
+  }, 8000);
 
-    return () => {
-      mounted = false;
-      clearTimeout(safety);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []); // run once
+  return () => {
+    mounted = false;
+    clearTimeout(safety);
+  };
+// run whenever showCountdown changes — we start only when it's false
+}, [showCountdown]);
+
 
   ///ORIGINAL 9 nov rayday screen          Timing for RayDay screen///////////////////////////
   useEffect(() => {
     // 🟢 Changed date: RayDay now starts Nov 9, 2025 at 1:00 AM NJ time (EST)
     // 🟢 Changed UTC offset: -05:00 (because daylight saving ends in November)
-    const targetTime = new Date("2025-11-09T13:00:00-05:00");
+    // const targetTime = new Date("2025-11-09T13:00:00-05:00");   //RayDay   //RAYDAY
+    const targetTime = new Date("2025-11-07T02:26:00-05:00");   //RayDay   //RAYDAY
     // (same as before)
     const now = new Date();
     const formatter = new Intl.DateTimeFormat("en-US", {
@@ -319,15 +326,15 @@ export default function Candle() {
   // Send email once when RayDay / after-birthday screen becomes visible
   useEffect(() => {
     if (isAfterBirthday && !raydaySentRef.current) {
-      sendRaydayLoadedEmail(); ///sends///
+      // sendRaydayLoadedEmail(); ///sends///
       raydaySentRef.current = true;
     }
   }, [isAfterBirthday]);
 
   // ✅ COUNTDOWN SECTION for loading screen 8 nov  ////////////////////////////////////
   useEffect(() => {
-    const target = new Date("2025-11-07T00:45:00-05:00"); // <-- only this line changed
-    // const target = new Date("2025-11-07T23:59:57-05:00");  ////This is original date for 8nov I wrote 7nov 12:59:57pm (3 sec before 8 nov for loading)
+    const target = new Date("2025-11-07T02:21:00-05:00"); // <-- only this line changed
+    // const target = new Date("2025-11-07T23:59:55-05:00");  //orange ////This is original date for 8nov I wrote 7nov 12:59:55pm (5 sec before 8 nov for loading)
 
     const interval = setInterval(() => {
       const now = new Date();
@@ -412,8 +419,8 @@ export default function Candle() {
         key={i}
         className="soft-seg"
         style={{
-          ["--angle"]: `${(360 / count) * i}deg`,
-          ["--i"]: `${i}`,
+          "--angle": `${(360 / count) * i}deg`,
+          "--i": `${i}`,
         }}
         aria-hidden="true"
       />
@@ -540,17 +547,18 @@ export default function Candle() {
     );
   }
   // show full-screen loader until important images are ready
-  if (imagesLoading) {
-    return (
-      <div className="initial-loader" role="status" aria-live="polite">
-        {/* uses SoftLoader already in your component */}
-        <SoftLoader className="initial-soft-loader" />
-        <div className="initial-loader__label" aria-hidden="true">
-          Loading… ({imagesLoadedCount}/{imagesToPreload.length})
-        </div>
+  // show full-screen loader only after countdown is gone and images are still loading
+if (!showCountdown && imagesLoading) {
+  return (
+    <div className="initial-loader" role="status" aria-live="polite">
+      <SoftLoader className="initial-soft-loader" />
+      <div className="initial-loader__label" aria-hidden="true">
+        Loading… ({imagesLoadedCount}/{imagesToPreload.length})
       </div>
-    );
-  }
+    </div>
+  );
+}
+
 
   if (showCountdown) {
     return (
