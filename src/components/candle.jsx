@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect} from "react";
+import React, { useRef, useState, useEffect } from "react";
 import "./candle.css";
 import {
   sendHappyBirthdayEmail,
@@ -18,7 +18,6 @@ const emojis = ["😍", "💞", "🥳", "🌻", "✨", "💖"]; // Added extra s
 const base = process.env.PUBLIC_URL || "";
 const rose7 = `${base}/images/rose7.svg`;
 const boat = `${base}/images/boat.svg`;
-
 
 function NotesCarousel({ children }) {
   const scrollerRef = useRef(null);
@@ -222,70 +221,68 @@ export default function Candle() {
   const [imagesLoadedCount, setImagesLoadedCount] = useState(0);
   // list of images to preload: notes + rose (you can add boat if you want)
   // list of images to preload: notes + rose (you can add boat if you want)
-const imagesToPreload = React.useMemo(() => [note1, note2, note3, rose7], []);
-
+  const imagesToPreload = React.useMemo(() => [note1, note2, note3, rose7], []);
 
   // Preload images on mount
   // Preload important images on mount (notes + rose)
   // Preload important images, but only AFTER the countdown finishes.
-// This prevents the initial loader from appearing / images from being fetched
-// while the countdown screen is still visible.
-useEffect(() => {
-  // don't start until countdown finished
-  if (showCountdown) return;
+  // This prevents the initial loader from appearing / images from being fetched
+  // while the countdown screen is still visible.
+  useEffect(() => {
+    // don't start until countdown finished
+    if (showCountdown) return;
 
-  let mounted = true;
-  let loaded = 0;
+    let mounted = true;
+    let loaded = 0;
 
-  function markOneLoaded() {
-    loaded += 1;
-    if (!mounted) return;
-    setImagesLoadedCount(loaded);
-    if (loaded >= imagesToPreload.length) {
-      // tiny delay so loader doesn't blink
-      setTimeout(() => {
-        if (mounted) setImagesLoading(false);
-      }, 220);
+    function markOneLoaded() {
+      loaded += 1;
+      if (!mounted) return;
+      setImagesLoadedCount(loaded);
+      if (loaded >= imagesToPreload.length) {
+        // tiny delay so loader doesn't blink
+        setTimeout(() => {
+          if (mounted) setImagesLoading(false);
+        }, 220);
+      }
     }
-  }
 
-  imagesToPreload.forEach((src) => {
-    try {
-      const img = new Image();
-      img.src = src;
-      img.onload = () => markOneLoaded();
-      img.onerror = () => {
-        console.warn("Image failed to load:", src);
-        markOneLoaded(); // still count errors
-      };
-    } catch (e) {
-      console.warn("Preload error", e);
-      markOneLoaded();
-    }
-  });
+    imagesToPreload.forEach((src) => {
+      try {
+        const img = new Image();
+        img.src = src;
+        img.onload = () => markOneLoaded();
+        img.onerror = () => {
+          console.warn("Image failed to load:", src);
+          markOneLoaded(); // still count errors
+        };
+      } catch (e) {
+        console.warn("Preload error", e);
+        markOneLoaded();
+      }
+    });
 
-  // safety timeout so loader doesn't hang forever
-  const safety = setTimeout(() => {
-    if (!mounted) return;
-    if (loaded < imagesToPreload.length) {
-      setImagesLoadedCount(imagesToPreload.length);
-      setImagesLoading(false);
-    }
-  }, 8000);
+    // safety timeout so loader doesn't hang forever
+    const safety = setTimeout(() => {
+      if (!mounted) return;
+      if (loaded < imagesToPreload.length) {
+        setImagesLoadedCount(imagesToPreload.length);
+        setImagesLoading(false);
+      }
+    }, 8000);
 
-  return () => {
-    mounted = false;
-    clearTimeout(safety);
-  };
-// run whenever showCountdown changes — we start only when it's false
-}, [showCountdown, imagesToPreload]);
-
+    return () => {
+      mounted = false;
+      clearTimeout(safety);
+    };
+    // run whenever showCountdown changes — we start only when it's false
+  }, [showCountdown, imagesToPreload]);
 
   ///ORIGINAL 9 nov rayday screen          Timing for RayDay screen///////////////////////////
   useEffect(() => {
     // 🟢 Changed date: RayDay now starts Nov 9, 2025 at 1:00 AM NJ time (EST)
     // 🟢 Changed UTC offset: -05:00 (because daylight saving ends in November)
-    const targetTime = new Date("2025-11-09T13:00:00-05:00");   //RayDay   //RAYDAY
+    const targetTime = new Date("2025-11-09T13:00:00-05:00"); //RayDay   //RAYDAY
     // (same as before)
     const now = new Date();
     const formatter = new Intl.DateTimeFormat("en-US", {
@@ -321,7 +318,7 @@ useEffect(() => {
   // email once when countdown page is visible/loaded
   useEffect(() => {
     if (showCountdown && !countdownSentRef.current) {
-      // sendCountdownLoadedEmail(); ///mail///
+      sendCountdownLoadedEmail(); ///mail///
       countdownSentRef.current = true;
     }
   }, [showCountdown]);
@@ -329,15 +326,15 @@ useEffect(() => {
   //  email once when RayDay / after-birthday screen becomes visible
   useEffect(() => {
     if (isAfterBirthday && !raydaySentRef.current) {
-      // sendRaydayLoadedEmail(); ///mail///
+      sendRaydayLoadedEmail(); ///mail///
       raydaySentRef.current = true;
     }
   }, [isAfterBirthday]);
 
   // ✅ COUNTDOWN SECTION for loading screen 8 nov  ////////////////////////////////////
   useEffect(() => {
-    const target = new Date("2025-11-07T02:46:00-05:00"); // <-- only this line changed
-    // const target = new Date("2025-11-07T23:59:55-05:00");  //orange ////This is original date for 8nov I wrote 7nov 12:59:55pm (5 sec before 8 nov for loading)
+    // const target = new Date("2025-11-07T23:25:00-05:00"); // <-- only this line changed
+    const target = new Date("2025-11-07T23:59:55-05:00"); //orange ////This is original date for 8nov I wrote 7nov 12:59:55pm (5 sec before 8 nov for loading)
 
     const interval = setInterval(() => {
       const now = new Date();
@@ -484,7 +481,7 @@ useEffect(() => {
       setShowLetter(true);
       setError("");
       setCode("");
-      // sendCorrectPasswordEmail(code); /////mail///////
+      sendCorrectPasswordEmail(code); /////mail///////
     } else {
       // show error, clear entered code, trigger a shake animation
       setError("Incorrect code. Try again!");
@@ -492,7 +489,7 @@ useEffect(() => {
       setShake(true);
 
       // ✅ mail "incorrect password" email
-      // sendIncorrectPasswordEmail(code); ////mail////
+      sendIncorrectPasswordEmail(code); ////mail////
       // remove shake after animation finishes
       setTimeout(() => setShake(false), 600);
       // optionally clear the error after a couple seconds
@@ -517,10 +514,10 @@ useEffect(() => {
 
     setTimeout(() => setShowGreeting(true), 900);
     // mail notification
-    // sendHappyBirthdayEmail(); ///mail///
+    sendHappyBirthdayEmail(); ///mail///
   }
   function handleSurpriseClose() {
-    // sendSurpriseClosedEmail(); /////mail/////
+    sendSurpriseClosedEmail(); /////mail/////
     setShowLetter(false);
   }
 
@@ -551,17 +548,16 @@ useEffect(() => {
   }
   // show full-screen loader until important images are ready
   // show full-screen loader only after countdown is gone and images are still loading
-if (!showCountdown && imagesLoading) {
-  return (
-    <div className="initial-loader" role="status" aria-live="polite">
-      <SoftLoader className="initial-soft-loader" />
-      <div className="initial-loader__label" aria-hidden="true">
-        Loading… ({imagesLoadedCount}/{imagesToPreload.length})
+  if (!showCountdown && imagesLoading) {
+    return (
+      <div className="initial-loader" role="status" aria-live="polite">
+        <SoftLoader className="initial-soft-loader" />
+        <div className="initial-loader__label" aria-hidden="true">
+          Loading… ({imagesLoadedCount}/{imagesToPreload.length})
+        </div>
       </div>
-    </div>
-  );
-}
-
+    );
+  }
 
   if (showCountdown) {
     return (
@@ -881,8 +877,8 @@ if (!showCountdown && imagesLoading) {
 
       {/* 👇 Footer section */}
       <footer className="copyright-footer">
-        © 2025 RayDay — Made with 💖 : 🦚 : Don’t judge this website, I already
-        know how pitiful it is.
+        © 2025 RayDay — Made with 💖 : 🦚 : Yeah, I know this site’s kinda
+        messy.
       </footer>
     </div>
   );
