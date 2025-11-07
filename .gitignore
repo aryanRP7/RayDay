@@ -25,7 +25,7 @@ yarn-error.log*
 
 # //You have to remeove these 2 files from GIT
 # and enable send email all of them
-# src/components/candle.jsx
+src/components/candle.jsx
 src/components/email.js
 
 # git rm --cached src/components/candle.jsx src/components/email.js
