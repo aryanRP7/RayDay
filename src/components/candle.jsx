@@ -334,7 +334,7 @@ export default function Candle() {
   // ✅ COUNTDOWN SECTION for loading screen 8 nov  ////////////////////////////////////
   useEffect(() => {
     // const target = new Date("2025-11-07T23:25:00-05:00"); // <-- only this line changed
-    const target = new Date("2025-11-07T23:59:55-05:00"); //orange ////This is original date for 8nov I wrote 7nov 12:59:55pm (5 sec before 8 nov for loading)
+    const target = new Date("2025-11-07T23:59:55-05:00"); //orange apple ////This is original date for 8nov I wrote 7nov 12:59:55pm (5 sec before 8 nov for loading)
 
     const interval = setInterval(() => {
       const now = new Date();
