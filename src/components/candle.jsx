@@ -1,13 +1,6 @@
 import React, { useRef, useState, useEffect } from "react";
 import "./candle.css";
-import {
-  sendHappyBirthdayEmail,
-  sendCorrectPasswordEmail,
-  sendIncorrectPasswordEmail,
-  sendCountdownLoadedEmail,
-  sendRaydayLoadedEmail,
-  sendSurpriseClosedEmail,
-} from "./email";
+
 
 import note1 from "../images/note1.svg";
 import note2 from "../images/note2.svg";
@@ -318,7 +311,6 @@ export default function Candle() {
   // email once when countdown page is visible/loaded
   useEffect(() => {
     if (showCountdown && !countdownSentRef.current) {
-      sendCountdownLoadedEmail(); ///mail///
       countdownSentRef.current = true;
     }
   }, [showCountdown]);
@@ -326,7 +318,6 @@ export default function Candle() {
   //  email once when RayDay / after-birthday screen becomes visible
   useEffect(() => {
     if (isAfterBirthday && !raydaySentRef.current) {
-      sendRaydayLoadedEmail(); ///mail///
       raydaySentRef.current = true;
     }
   }, [isAfterBirthday]);
@@ -481,7 +472,6 @@ export default function Candle() {
       setShowLetter(true);
       setError("");
       setCode("");
-      sendCorrectPasswordEmail(code); /////mail///////
     } else {
       // show error, clear entered code, trigger a shake animation
       setError("Incorrect code. Try again!");
@@ -489,7 +479,6 @@ export default function Candle() {
       setShake(true);
 
       // ✅ mail "incorrect password" email
-      sendIncorrectPasswordEmail(code); ////mail////
       // remove shake after animation finishes
       setTimeout(() => setShake(false), 600);
       // optionally clear the error after a couple seconds
@@ -514,10 +503,8 @@ export default function Candle() {
 
     setTimeout(() => setShowGreeting(true), 900);
     // mail notification
-    sendHappyBirthdayEmail(); ///mail///
   }
   function handleSurpriseClose() {
-    sendSurpriseClosedEmail(); /////mail/////
     setShowLetter(false);
   }
 
