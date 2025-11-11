@@ -2548,10 +2548,7 @@ body {
   opacity: 0.28;
 }
 
-/* ====== LAYER 3: close stars (using :backdrop hack) ====== */
-.rayday-screen::backdrop {
-  /* browsers ignore this unless we define a selector trick */
-}
+
 
 /* We simulate a third layer by duplicating on a nested pseudo-element */
 .rayday-screen::after::after,
