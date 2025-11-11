@@ -2509,3 +2509,73 @@ body {
     font-size: 0.9rem;
   }
 }
+
+
+
+/* MAIN BACKGROUND stays the same */
+.rayday-screen {
+  min-height: 100vh;
+  display: flex; flex-direction: column; justify-content: center; align-items: center;
+  text-align: center; font-family: "Poppins", sans-serif;
+  color: #ffddbb;
+  background: linear-gradient(160deg, #120804 0%, #1a0f0a 40%, #2b1811 100%);
+  background-attachment: fixed;
+  position: relative;
+  overflow: hidden;
+}
+
+/* ====== LAYER 1: far stars ====== */
+.rayday-screen::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background-image: radial-gradient(2px 2px at 2px 2px, rgba(255,255,255,0.35), transparent);
+  background-size: 50px 50px;
+  animation: starDrift1 60s linear infinite;
+  opacity: 0.25;
+}
+
+/* ====== LAYER 2: mid stars ====== */
+.rayday-screen::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background-image: radial-gradient(3px 3px at 3px 3px, rgba(255,210,160,0.45), transparent);
+  background-size: 80px 80px;
+  animation: starDrift2 90s linear infinite;
+  opacity: 0.28;
+}
+
+/* ====== LAYER 3: close stars (using :backdrop hack) ====== */
+.rayday-screen::backdrop {
+  /* browsers ignore this unless we define a selector trick */
+}
+
+/* We simulate a third layer by duplicating on a nested pseudo-element */
+.rayday-screen::after::after,
+.rayday-screen::before::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background-image: radial-gradient(4px 4px at 4px 4px, rgba(255,180,120,0.55), transparent);
+  background-size: 120px 120px;
+  animation: starDrift3 140s linear infinite;
+  opacity: 0.35;
+}
+
+/* ===== ANIMATIONS ===== */
+@keyframes starDrift1 {
+  from { transform: translate3d(0,0,0); }
+  to   { transform: translate3d(-200px, -600px, 0); }
+}
+@keyframes starDrift2 {
+  from { transform: translate3d(0,0,0); }
+  to   { transform: translate3d(-400px, -1000px, 0); }
+}
+@keyframes starDrift3 {
+  from { transform: translate3d(0,0,0); }
+  to   { transform: translate3d(-700px, -1600px, 0); }
+}
