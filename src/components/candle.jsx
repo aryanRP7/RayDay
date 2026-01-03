@@ -275,7 +275,7 @@ export default function Candle() {
   useEffect(() => {
     // 🟢 Changed date: RayDay now starts Nov 9, 2025 at 1:00 AM NJ time (EST)
     // 🟢 Changed UTC offset: -05:00 (because daylight saving ends in November)
-    const targetTime = new Date("2025-11-09T13:00:00-05:00"); //RayDay   //RAYDAY
+    const targetTime = new Date("5025-11-09T13:00:00-05:00"); //RayDay   //RAYDAY
     // (same as before)
     const now = new Date();
     const formatter = new Intl.DateTimeFormat("en-US", {
